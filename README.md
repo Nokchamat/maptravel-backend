@@ -9,7 +9,12 @@ Front : Flutter
 ## 개발 정보
 - 개발 인원 : 1명 (본인)
 - Backend 개발 시작 : 2023/11/12 ~ (진행 중)
-- 스케쥴링 : JIRA
+
+## ERD
+<img width="1217" alt="image" src="https://github.com/Nokchamat/maptravel-backend/assets/107979129/f1e3f189-a3a8-4ee1-aeae-e1235d992cab">
+
+
+  
 
 ## 프로젝트 주요 기능
 ### 회원가입 / 로그인
