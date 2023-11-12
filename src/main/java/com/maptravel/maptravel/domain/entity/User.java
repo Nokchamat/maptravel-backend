@@ -1,5 +1,6 @@
 package com.maptravel.maptravel.domain.entity;
 
+import com.maptravel.maptravel.domain.constants.ProviderType;
 import com.maptravel.maptravel.domain.constants.RoleType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +35,14 @@ public class User extends BaseTimeEntity {
 
   private String profileImageUrl;
 
+  private String emailVerifyCode;
+
+  private Boolean isEmailVerify;
+
   @Enumerated(EnumType.STRING)
   private RoleType role;
+
+  @Enumerated(EnumType.STRING)
+  private ProviderType provider;
 
 }
