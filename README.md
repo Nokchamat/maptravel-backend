@@ -2,8 +2,8 @@
 여행에 필요한 정보를 볼 수 있고 공유하는 앱
 
 ## 기술 스택
-Backend : Java, Spring Boot, JPA, Docker, Mysql
-DevOps : AWS EC2, AWS RDS, AWS S3, Docker
+Backend : Java, Spring Boot, JPA, Docker, Mysql \
+DevOps : AWS EC2, AWS RDS, AWS S3, Docker \
 Front : Flutter
 
 ## 개발 정보
@@ -20,28 +20,21 @@ Front : Flutter
         - 애플 로그인
 
     로그인
-    - 이메일과 비밀번호를 통해 로그인
-    - 로그인 시 Jwt Token 발행
-    - 게시물 조회 이외 행동 시 로그인 필요
+    - Oauth2로 예정
 
 ### 게시물
     작성
     - 로그인 상태에서 작성 가능
-    - 
 
     조회
     - 게시물 조회 시에는 로그인 없이 가능
     - 상세 조회 시 조회수 증가
 
-    수정
-    - 게시물 수정 시 내 프로필로 들어갔을 때 가능
-
 ### 좋아요
-    - 게시물에 대해 좋아요 등록, 등록 취소, 조회
+    - 게시물에 대해 좋아요 등록, 취소, 조회
 
 ### 팔로우
-    - 사람에 대해 팔로우 가능
-    - 팔로우 한 사람이 게시물 작성 시 알림에 메시지 제공
+    - 사람에 대해 팔로우 등록, 취소, 조회
 
 ### 채팅
-    - 게시물 작성자의 프로필을 확인 후 채팅
+    - 게시물 작성자와 채팅 가능
