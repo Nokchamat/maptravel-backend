@@ -19,7 +19,7 @@ public class AmazonS3Service {
 
   private final ObjectMetadata objectMetadata = new ObjectMetadata();
 
-  // TODO PREFIX 바꿔야함
+  //TODO PREFIX 바꿔야함
   private final static String PREFIX = "PREFIX";
 
   private final AmazonS3Client amazonS3Client;
