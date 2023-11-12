@@ -1,0 +1,27 @@
+server:
+  port:8080
+
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB # ??? ?? ? ?? ??
+      max-request-size: 15MB # ??? ?? ??? ??
+cloud:
+  aws:
+    s3:
+      prefix: ${AWS_S3_PREFIX}
+      bucket: ${BUCKET_NAME}
+    stack.auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      accessKey: ${BUCKET_ACCESS_KEY}
+      secretKey: ${BUCKET_SECRET_KEY}
