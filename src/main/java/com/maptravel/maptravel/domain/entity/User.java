@@ -1,6 +1,5 @@
 package com.maptravel.maptravel.domain.entity;
 
-import com.maptravel.maptravel.domain.constants.ProviderType;
 import com.maptravel.maptravel.domain.constants.RoleType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +43,8 @@ public class User extends BaseTimeEntity {
   @Enumerated(EnumType.STRING)
   private RoleType role;
 
-  @Enumerated(EnumType.STRING)
-  private ProviderType provider;
+  private String provider;
+
+  private String providerId;
 
 }

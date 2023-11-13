@@ -1,4 +1,4 @@
-package com.maptravel.maptravel.jwt;
+package com.maptravel.maptravel.oauth.jwt;
 
 
 import com.auth0.jwt.JWT;
@@ -10,6 +10,7 @@ import com.maptravel.maptravel.domain.entity.User;
 import com.maptravel.maptravel.domain.repository.UserRepository;
 import com.maptravel.maptravel.exception.CustomException;
 import com.maptravel.maptravel.exception.ErrorCode;
+import com.maptravel.maptravel.oauth.domain.Token;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -18,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,26 +33,36 @@ public class JwtTokenProvider {
   @Value("${spring.jwt.secret-key}")
   private String secretKey;
 
-  @Value("${spring.jwt.expiration}")
+  @Value("${spring.jwt.access.expiration}")
   private Long accessTokenExpireTime;
+
+  @Value("${spring.jwt.refresh.expiration}")
+  private Long refreshTokenExpireTime;
 
   private final UserRepository userRepository;
 
   private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
+  private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
+
   private static final String EMAIL_CLAIM = "email";
   public static final String PREFIX = "Bearer ";
 
-  public String createAccessToken(String email) {
+  public Token generateToken(String email) {
     Date now = new Date();
 
-    return PREFIX + JWT.create()
-        .withIssuer("note")
-        .withSubject(ACCESS_TOKEN_SUBJECT)
-        .withAudience("user")
-        .withExpiresAt(new Date(now.getTime() + accessTokenExpireTime))
-        .withIssuedAt(new Date(now.getTime()))
-        .withClaim(EMAIL_CLAIM, email)
-        .sign(Algorithm.HMAC256(secretKey));
+    return new Token(
+        PREFIX + JWT.create()
+            .withSubject(ACCESS_TOKEN_SUBJECT)
+            .withExpiresAt(new Date(now.getTime() + accessTokenExpireTime))
+            .withIssuedAt(new Date(now.getTime()))
+            .withClaim(EMAIL_CLAIM, email)
+            .sign(Algorithm.HMAC256(secretKey)),
+        PREFIX + JWT.create()
+            .withSubject(REFRESH_TOKEN_SUBJECT)
+            .withExpiresAt(new Date(now.getTime() + refreshTokenExpireTime))
+            .withIssuedAt(new Date(now.getTime()))
+            .withClaim(EMAIL_CLAIM, email)
+            .sign(Algorithm.HMAC256(secretKey)));
   }
 
   public boolean isTokenValid(String token) {
@@ -97,7 +107,7 @@ public class JwtTokenProvider {
   }
 
   public static Optional<String> resolveToken(HttpServletRequest request) {
-    return Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION));
+    return Optional.ofNullable(request.getHeader(ACCESS_TOKEN_SUBJECT));
   }
 
 }

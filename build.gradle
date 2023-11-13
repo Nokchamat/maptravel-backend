@@ -32,13 +32,10 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-s3:1.12.232")
     implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-secrets-manager-config', version: '2.4.0'
 
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.6.2'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation 'com.auth0:java-jwt:4.2.1'
-//    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
-//    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
-//    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 }
 
 tasks.named('bootBuildImage') {

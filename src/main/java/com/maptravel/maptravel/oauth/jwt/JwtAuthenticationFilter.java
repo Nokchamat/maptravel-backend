@@ -1,7 +1,5 @@
-package com.maptravel.maptravel.jwt;
+package com.maptravel.maptravel.oauth.jwt;
 
-import com.maptravel.maptravel.exception.CustomException;
-import com.maptravel.maptravel.exception.ErrorCode;
 import java.io.IOException;
 import java.util.Optional;
 import javax.servlet.FilterChain;
@@ -24,6 +22,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       FilterChain filterChain) throws ServletException, IOException {
     log.info("[JwtAuthenticationFilter] 진입");
     Optional<String> token = JwtTokenProvider.resolveToken(request);
+
     if (token.isEmpty() || token.get().equals("")) {
       filterChain.doFilter(request, response);
       return;
@@ -35,7 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     if (!jwtTokenProvider.isTokenValid(token.get())) {
       log.info("[JwtAuthenticationFilter] TokenVerify 실패 Email : " + email);
-      throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
     log.info("[JwtAuthenticationFilter] TokenVerify 완료 Email : " + email);
