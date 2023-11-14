@@ -31,11 +31,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User { // OAuth2User
     return attributes;
   }
 
-  // 해당 User의 권한을 리턴하는 곳!
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     Collection<GrantedAuthority> collect = new ArrayList<>();
-    collect.add((GrantedAuthority) () -> user.getRole().getKey());
+    collect.add((GrantedAuthority) () -> user.getRole().getCode());
 
     return collect;
   }
