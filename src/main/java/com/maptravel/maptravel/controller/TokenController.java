@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/token")
 public class TokenController {
 
   private final JwtTokenProvider jwtTokenProvider;
   private final TokenService tokenService;
 
-  @GetMapping("/token/refresh")
+  @GetMapping("/refresh")
   public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
     String token = request.getHeader(REFRESH_TOKEN);
 
