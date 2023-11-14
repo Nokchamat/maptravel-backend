@@ -47,4 +47,7 @@ public class User extends BaseTimeEntity {
 
   private String providerId;
 
+  public void setEmailVerify() {
+    isEmailVerify = true;
+  }
 }
