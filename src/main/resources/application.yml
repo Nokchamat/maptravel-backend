@@ -62,6 +62,18 @@ spring:
 #            token_uri: https://kauth.kakao.com/oauth/token
 #            user-info-uri: https://kapi.kakao.com/v2/user/me
 #            user_name_attribute: id
+  mail:
+    host: smtp.gmail.com # SMTP 서버 호스트
+    port: 587 # SMTP 서버 포트
+    username: ${MAIL_ID} # SMTP 서버 로그인 아이디
+    password: ${MAIL_PASSWORD} # SMTP 서버 로그인 앱 패스워드
+    properties:
+      mail:
+        smtp:
+          auth: true # 사용자 인증 시도 여부 (기본값 : false)
+          timeout: 5000 # Socket Read Timeout 시간(ms) (기본값 : 무한대)
+          starttls:
+            enable: true # StartTLS 활성화 여부 (기본값 : false)
 cloud:
   aws:
     s3:

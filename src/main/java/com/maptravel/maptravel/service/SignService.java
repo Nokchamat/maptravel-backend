@@ -23,6 +23,7 @@ public class SignService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
+  private final SendEmailService sendEmailService;
 
   @Transactional
   public void signUp(SignUpForm signUpForm) {
@@ -45,6 +46,8 @@ public class SignService {
         .role(RoleType.USER)
         .provider(ProviderType.LOCAL.name())
         .build());
+
+    sendEmailService.sendMail(signUpForm.getEmail(), emailVerifyCode);
   }
 
   public Token signIn(SignInForm signInForm) {
