@@ -95,4 +95,29 @@ public class PlaneService {
 
     return PlaneDto.fromEntity(plane, placeDtoList);
   }
+
+  @Transactional
+  public void deletePlane(User user, Long planeId) {
+    Plane plane = planeRepository.findById(planeId)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PLANE));
+
+    if (!plane.getUser().getId().equals(user.getId())) {
+      throw new CustomException(ErrorCode.PERMISSION_DENIED);
+    }
+    amazonS3Service.deleteUploadFile(plane.getThumbnailUrl());
+
+    placeRepository.findAllByPlaneId(planeId).forEach(place -> {
+      try {
+        amazonS3Service.deleteUploadFileArray(
+            objectMapper.readValue(place.getPictureListUrl(), String[].class));
+
+        placeRepository.delete(place);
+      } catch (JsonProcessingException exception) {
+        exception.printStackTrace();
+      }
+
+    });
+
+    planeRepository.delete(plane);
+  }
 }
