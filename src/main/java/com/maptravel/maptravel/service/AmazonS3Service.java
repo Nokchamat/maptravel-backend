@@ -3,6 +3,7 @@ package com.maptravel.maptravel.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,7 @@ public class AmazonS3Service {
 
   private final ObjectMetadata objectMetadata = new ObjectMetadata();
 
-  //TODO PREFIX 바꿔야함
-  private final static String PREFIX = "PREFIX";
+  private final static String PREFIX = "https://bucket-maptravel.s3.ap-northeast-2.amazonaws.com/";
 
   private final AmazonS3Client amazonS3Client;
 
@@ -103,6 +103,16 @@ public class AmazonS3Service {
     amazonS3Client.deleteObject(bucket, uploadedFileUrl.substring(PREFIX.length()));
 
     log.info("[deleteUploadFile 완료]" + " uploadedFileUrl : " + uploadedFileUrl);
+  }
+
+  public void deleteUploadFileArray(String[] uploadedFileArray) {
+    log.info("[deleteUploadFileArray 시작]" + " uploadedFileArray : " + Arrays.toString(uploadedFileArray));
+
+    for (String uploadedFileUrl : uploadedFileArray) {
+      amazonS3Client.deleteObject(bucket, uploadedFileUrl.substring(PREFIX.length()));
+    }
+
+    log.info("[deleteUploadFileArray 완료]" + " uploadedFileArray : " + Arrays.toString(uploadedFileArray));
   }
 
 }

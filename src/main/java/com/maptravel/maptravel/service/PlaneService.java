@@ -1,5 +1,10 @@
 package com.maptravel.maptravel.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maptravel.maptravel.domain.dto.PlaceDto;
+import com.maptravel.maptravel.domain.dto.PlaneDto;
+import com.maptravel.maptravel.domain.dto.PlaneListDto;
 import com.maptravel.maptravel.domain.entity.Place;
 import com.maptravel.maptravel.domain.entity.Plane;
 import com.maptravel.maptravel.domain.entity.User;
@@ -7,7 +12,13 @@ import com.maptravel.maptravel.domain.form.CreatePlaceForm;
 import com.maptravel.maptravel.domain.form.CreatePlaneForm;
 import com.maptravel.maptravel.domain.repository.PlaceRepository;
 import com.maptravel.maptravel.domain.repository.PlaneRepository;
+import com.maptravel.maptravel.exception.CustomException;
+import com.maptravel.maptravel.exception.ErrorCode;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +32,15 @@ public class PlaneService {
 
   private final AmazonS3Service amazonS3Service;
 
+  private final ObjectMapper objectMapper;
+
   @Transactional
   public void createPlane(User user, CreatePlaneForm createPlaneForm) {
 
     Plane plane = planeRepository.save(Plane.builder()
         .subject(createPlaneForm.getSubject())
         .content(createPlaneForm.getContent())
+        .viewCount(0L)
         .user(user)
         .build());
     plane.setThumbnailUrl(
@@ -40,13 +54,70 @@ public class PlaneService {
           .content(createPlaceForm.getContent())
           .address(createPlaceForm.getAddress())
           .plane(plane)
-          .pictureUrl(
+          .pictureListUrl(
               amazonS3Service.uploadForPictureList(
                   createPlaceForm.getPictureList(), i, plane.getId())
-          )
-          .build());
+          ).build());
     }
+  }
 
+  public Page<PlaneListDto> getPlaneList(User user, Pageable pageable) {
 
+    return planeRepository.findAll(pageable)
+        .map(PlaneListDto::fromEntity);
+  }
+
+  @Transactional
+  public PlaneDto getPlaneDetail(User user, Long planeId) {
+    Plane plane = planeRepository.findById(planeId)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PLANE));
+    plane.addViewCount();
+
+    List<PlaceDto> placeDtoList = placeRepository.findAllByPlaneId(planeId)
+        .stream().map(place -> {
+
+          PlaceDto placeDto = PlaceDto.builder()
+              .id(place.getId())
+              .subject(place.getSubject())
+              .content(place.getContent())
+              .address(place.getAddress())
+              .build();
+
+          try {
+            placeDto.setPictureUrlArray(
+                objectMapper.readValue(place.getPictureListUrl(), String[].class));
+          } catch (JsonProcessingException exception) {
+            exception.printStackTrace();
+          }
+
+          return placeDto;
+        }).collect(Collectors.toList());
+
+    return PlaneDto.fromEntity(plane, placeDtoList);
+  }
+
+  @Transactional
+  public void deletePlane(User user, Long planeId) {
+    Plane plane = planeRepository.findById(planeId)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PLANE));
+
+    if (!plane.getUser().getId().equals(user.getId())) {
+      throw new CustomException(ErrorCode.PERMISSION_DENIED);
+    }
+    amazonS3Service.deleteUploadFile(plane.getThumbnailUrl());
+
+    placeRepository.findAllByPlaneId(planeId).forEach(place -> {
+      try {
+        amazonS3Service.deleteUploadFileArray(
+            objectMapper.readValue(place.getPictureListUrl(), String[].class));
+
+        placeRepository.delete(place);
+      } catch (JsonProcessingException exception) {
+        exception.printStackTrace();
+      }
+
+    });
+
+    planeRepository.delete(plane);
   }
 }
