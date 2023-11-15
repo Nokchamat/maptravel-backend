@@ -14,6 +14,8 @@ public enum ErrorCode {
   MISMATCH_EMAIL_VERIFY_CODE(HttpStatus.BAD_REQUEST, "이메일 인증코드가 일치하지 않습니다."),
 
   NOT_FOUND_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "리프래시 토큰을 찾을 수 없습니다."),
+  
+  NOT_FOUND_PLANE(HttpStatus.BAD_REQUEST, "여행 게시물을 찾을 수 없습니다."),
 
   INVALID_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 토큰입니다."),
 

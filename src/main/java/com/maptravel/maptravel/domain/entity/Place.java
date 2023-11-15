@@ -1,6 +1,7 @@
 package com.maptravel.maptravel.domain.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,11 +27,11 @@ public class Place extends BaseTimeEntity {
 
   private String content;
 
-  private String pictureUrl;
-
   private String address;
 
-  @ManyToOne
+  private String pictureListUrl;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "plane_id")
   private Plane plane;
 
