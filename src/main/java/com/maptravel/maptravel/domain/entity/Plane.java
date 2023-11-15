@@ -32,4 +32,7 @@ public class Plane extends BaseTimeEntity {
   @JoinColumn(name = "user_id")
   private User user;
 
+  public void setThumbnailUrl(String thumbnailUrl) {
+    this.thumbnailUrl = thumbnailUrl;
+  }
 }
