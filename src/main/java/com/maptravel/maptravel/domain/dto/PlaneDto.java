@@ -1,9 +1,7 @@
 package com.maptravel.maptravel.domain.dto;
 
-import com.maptravel.maptravel.domain.entity.Place;
 import com.maptravel.maptravel.domain.entity.Plane;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
