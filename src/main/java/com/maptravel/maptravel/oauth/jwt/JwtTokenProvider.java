@@ -1,6 +1,8 @@
 package com.maptravel.maptravel.oauth.jwt;
 
 
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
@@ -41,8 +43,8 @@ public class JwtTokenProvider {
 
   private final UserRepository userRepository;
 
-  private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
-  private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
+  public static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
+  public static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
 
   private static final String EMAIL_CLAIM = "email";
   public static final String PREFIX = "Bearer ";
@@ -107,7 +109,7 @@ public class JwtTokenProvider {
   }
 
   public static Optional<String> resolveToken(HttpServletRequest request) {
-    return Optional.ofNullable(request.getHeader(ACCESS_TOKEN_SUBJECT));
+    return Optional.ofNullable(request.getHeader(ACCESS_TOKEN));
   }
 
 }
