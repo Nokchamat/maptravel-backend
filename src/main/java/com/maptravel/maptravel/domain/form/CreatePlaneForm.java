@@ -19,6 +19,10 @@ public class CreatePlaneForm {
 
   private String content;
 
+  private String country;
+
+  private String city;
+
   private MultipartFile thumbnail;
 
   List<CreatePlaceForm> createPlaceFormList;

@@ -21,6 +21,10 @@ public class BookmarkDto {
 
   private String content;
 
+  private String country;
+
+  private String city;
+
   private String thumbnailUrl;
 
   private Long viewCount;

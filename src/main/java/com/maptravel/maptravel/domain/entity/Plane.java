@@ -27,6 +27,10 @@ public class Plane extends BaseTimeEntity {
 
   private String content;
 
+  private String country;
+
+  private String city;
+
   private Long viewCount;
 
   private String thumbnailUrl;
