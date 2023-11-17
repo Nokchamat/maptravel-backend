@@ -126,6 +126,8 @@ class PlaneControllerTest {
     CreatePlaneForm createPlaneForm = CreatePlaneForm.builder()
         .subject("subject")
         .content("content")
+        .country("country")
+        .city("city")
         .thumbnail(
             new MockMultipartFile("thumbnail", "thumbnail.png", "png",
                 "test file".getBytes(StandardCharsets.UTF_8)))
@@ -145,13 +147,23 @@ class PlaneControllerTest {
                     createPlaceFormList.get(1).getPictureList().get(1).getBytes())
                 .param("subject", createPlaneForm.getSubject())
                 .param("content", createPlaneForm.getContent())
-                .param("createPlaceFormList[0].subject", createPlaceFormList.get(0).getSubject())
-                .param("createPlaceFormList[0].content", createPlaceFormList.get(0).getContent())
-                .param("createPlaceFormList[0].address", createPlaceFormList.get(0).getAddress())
-                .param("createPlaceFormList[1].subject", createPlaceFormList.get(1).getSubject())
-                .param("createPlaceFormList[1].content", createPlaceFormList.get(1).getContent())
-                .param("createPlaceFormList[1].address", createPlaceFormList.get(1).getAddress())
-                .header(ACCESS_TOKEN, jwtTokenProvider.generateToken(user.getEmail()).getAccessToken())
+                .param("country", createPlaneForm.getCountry())
+                .param("city", createPlaneForm.getCity())
+                .param("createPlaceFormList[0].subject",
+                    createPlaceFormList.get(0).getSubject())
+                .param("createPlaceFormList[0].content",
+                    createPlaceFormList.get(0).getContent())
+                .param("createPlaceFormList[0].address",
+                    createPlaceFormList.get(0).getAddress())
+                .param("createPlaceFormList[1].subject",
+                    createPlaceFormList.get(1).getSubject())
+                .param("createPlaceFormList[1].content",
+                    createPlaceFormList.get(1).getContent())
+                .param("createPlaceFormList[1].address",
+                    createPlaceFormList.get(1).getAddress())
+                .header(ACCESS_TOKEN,
+                    jwtTokenProvider.generateToken(user.getEmail())
+                        .getAccessToken())
         ).andExpect(
             status().isOk()
         )
@@ -231,6 +243,8 @@ class PlaneControllerTest {
     Plane plane = planeRepository.save(Plane.builder()
         .subject("subject")
         .content("content")
+        .country("country")
+        .city("city")
         .viewCount(0L)
         .thumbnailUrl(THUMBNAIL)
         .user(user)
@@ -255,7 +269,12 @@ class PlaneControllerTest {
         ).andExpect(
             jsonPath("$.content", equalTo(plane.getContent()))
         ).andExpect(
-            jsonPath("$.viewCount", equalTo(Integer.parseInt(plane.getViewCount().toString()) + 1))
+            jsonPath("$.country", equalTo(plane.getCountry()))
+        ).andExpect(
+            jsonPath("$.city", equalTo(plane.getCity()))
+        ).andExpect(
+            jsonPath("$.viewCount",
+                equalTo(Integer.parseInt(plane.getViewCount().toString()) + 1))
         ).andExpect(
             jsonPath("$.thumbnailUrl", equalTo(plane.getThumbnailUrl()))
         ).andExpect(
@@ -263,7 +282,8 @@ class PlaneControllerTest {
         ).andExpect(
             jsonPath("$.userProfileImageUrl", equalTo(user.getProfileImageUrl()))
         ).andExpect(
-            jsonPath("$.placeDtoList[0].id", equalTo(Integer.parseInt(place.getId().toString())))
+            jsonPath("$.placeDtoList[0].id",
+                equalTo(Integer.parseInt(place.getId().toString())))
         ).andExpect(
             jsonPath("$.placeDtoList[0].subject", equalTo(place.getSubject()))
         ).andExpect(
@@ -310,7 +330,9 @@ class PlaneControllerTest {
 
     mockMvc.perform(
             delete(url + "/v1/place/" + plane.getId())
-                .header(ACCESS_TOKEN, jwtTokenProvider.generateToken(user.getEmail()).getAccessToken())
+                .header(ACCESS_TOKEN,
+                    jwtTokenProvider.generateToken(user.getEmail())
+                        .getAccessToken())
         ).andExpect(
             status().isOk()
         )

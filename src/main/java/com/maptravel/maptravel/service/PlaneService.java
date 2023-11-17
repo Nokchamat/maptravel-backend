@@ -40,14 +40,17 @@ public class PlaneService {
     Plane plane = planeRepository.save(Plane.builder()
         .subject(createPlaneForm.getSubject())
         .content(createPlaneForm.getContent())
+        .country(createPlaneForm.getCountry())
+        .city(createPlaneForm.getCity())
         .viewCount(0L)
         .user(user)
         .build());
-    plane.setThumbnailUrl(
-        amazonS3Service.uploadForThumbnail(createPlaneForm.getThumbnail(), plane.getId()));
+    plane.setThumbnailUrl(amazonS3Service.uploadForThumbnail(
+        createPlaneForm.getThumbnail(), plane.getId()));
 
     for (int i = 0; i < createPlaneForm.getCreatePlaceFormList().size(); i++) {
-      CreatePlaceForm createPlaceForm = createPlaneForm.getCreatePlaceFormList().get(i);
+      CreatePlaceForm createPlaceForm =
+          createPlaneForm.getCreatePlaceFormList().get(i);
 
       placeRepository.save(Place.builder()
           .subject(createPlaceForm.getSubject())
@@ -85,7 +88,8 @@ public class PlaneService {
 
           try {
             placeDto.setPictureUrlArray(
-                objectMapper.readValue(place.getPictureListUrl(), String[].class));
+                objectMapper.readValue(place.getPictureListUrl(),
+                    String[].class));
           } catch (JsonProcessingException exception) {
             exception.printStackTrace();
           }
@@ -115,7 +119,6 @@ public class PlaneService {
       } catch (JsonProcessingException exception) {
         exception.printStackTrace();
       }
-
     });
 
     planeRepository.delete(plane);

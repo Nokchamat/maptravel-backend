@@ -18,6 +18,10 @@ public class PlaneListDto {
 
   private String content;
 
+  private String country;
+
+  private String city;
+
   private Long viewCount;
 
   private String thumbnailUrl;
@@ -34,6 +38,8 @@ public class PlaneListDto {
         .planeId(plane.getId())
         .subject(plane.getSubject())
         .content(plane.getContent())
+        .country(plane.getCountry())
+        .city(plane.getCity())
         .viewCount(plane.getViewCount())
         .thumbnailUrl(plane.getThumbnailUrl())
         .userNickname(plane.getUser().getNickname())

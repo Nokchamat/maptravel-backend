@@ -52,6 +52,8 @@ public class BookmarkService {
               .planeId(plane.getId())
               .subject(plane.getSubject())
               .content(plane.getContent())
+              .country(plane.getCountry())
+              .city(plane.getCity())
               .thumbnailUrl(plane.getThumbnailUrl())
               .viewCount(plane.getViewCount())
               .userNickname(user.getNickname())
