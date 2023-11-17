@@ -32,7 +32,7 @@ public class BookmarkController {
   }
 
   @GetMapping("/plane/bookmark")
-  ResponseEntity<Page<BookmarkDto>> addBookmark(@AuthenticationPrincipal User user,
+  ResponseEntity<Page<BookmarkDto>> getBookmark(@AuthenticationPrincipal User user,
       Pageable pageable) {
 
     return ResponseEntity.ok(bookmarkService.getBookmark(user, pageable));

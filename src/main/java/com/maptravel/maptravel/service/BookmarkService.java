@@ -41,7 +41,6 @@ public class BookmarkService {
         .build());
   }
 
-
   public Page<BookmarkDto> getBookmark(User user, Pageable pageable) {
     return bookmarkRepository.findAllByUserId(user.getId(), pageable)
         .map(bookmark -> {
