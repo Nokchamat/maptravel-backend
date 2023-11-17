@@ -1,4 +1,4 @@
-package com.maptravel.maptravel.service;
+package com.maptravel.maptravel.controller;
 
 import static com.maptravel.maptravel.domain.constants.ProviderType.LOCAL;
 import static org.hamcrest.Matchers.equalTo;
@@ -32,7 +32,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @DisplayName("여행 게시물 북마크 컨트롤러 테스트")
 @AutoConfigureMockMvc
 @SpringBootTest
-class BookmarkServiceTest {
+class BookmarkControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -98,7 +98,7 @@ class BookmarkServiceTest {
     assertEquals(user.getId(), bookmark.getUser().getId());
   }
 
-  @DisplayName("여행 게시물 조회 - 성공")
+  @DisplayName("여행 게시물 북마크 조회 - 성공")
   @Test
   void getBookmark_Success() throws Exception {
     User user = userRepository.save(User.builder()
