@@ -29,10 +29,14 @@ public class SignService {
   public void signUp(SignUpForm signUpForm) {
 
     userRepository.findByEmail(signUpForm.getEmail())
-        .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_EXIST_EMAIL));
+        .ifPresent(user -> {
+          throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL);
+        });
 
     userRepository.findByNickname(signUpForm.getNickname())
-        .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_EXIST_NICKNAME));
+        .ifPresent(user -> {
+          throw new CustomException(ErrorCode.ALREADY_EXIST_NICKNAME);
+        });
 
     String emailVerifyCode = RandomString.make(5);
 
@@ -54,7 +58,8 @@ public class SignService {
 
     userRepository.findByEmail(signInForm.getEmail())
         .ifPresent(user -> {
-          if (!passwordEncoder.matches(signInForm.getPassword(), user.getPassword())) {
+          if (!passwordEncoder.matches(signInForm.getPassword(),
+              user.getPassword())) {
             throw new CustomException(ErrorCode.MISMATCH_EMAIL_PASSWORD);
           }
         });
