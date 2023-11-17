@@ -56,7 +56,6 @@ class BookmarkServiceTest {
   void init() {
     bookmarkRepository.deleteAll();
     planeRepository.deleteAll();
-    bookmarkRepository.deleteAll();
     userRepository.deleteAll();
   }
 
