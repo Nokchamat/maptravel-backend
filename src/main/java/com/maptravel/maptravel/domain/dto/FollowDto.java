@@ -1,5 +1,6 @@
 package com.maptravel.maptravel.domain.dto;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,26 +12,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BookmarkDto {
+public class FollowDto {
 
   private Long id;
-
-  private Long planeId;
-
-  private String subject;
-
-  private String content;
-
-  private String country;
-
-  private String city;
-
-  private String thumbnailUrl;
-
-  private Long viewCount;
 
   private String userNickname;
 
   private String userProfileImageUrl;
+
+  private LocalDateTime createdAt;
 
 }

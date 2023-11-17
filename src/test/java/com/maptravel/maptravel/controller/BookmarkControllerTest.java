@@ -159,7 +159,7 @@ class BookmarkControllerTest {
             MockMvcResultMatchers.jsonPath("$.content[0].userNickname",
                 equalTo(user.getNickname()))
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].userProfileUrl",
+            MockMvcResultMatchers.jsonPath("$.content[0].userProfileImageUrl",
                 equalTo(user.getProfileImageUrl()))
         )
         .andDo(MockMvcResultHandlers.print());

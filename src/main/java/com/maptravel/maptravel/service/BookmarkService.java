@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class BookmarkService {
 
   private final PlaneRepository planeRepository;
 
+  @Transactional
   public void addBookmark(User user, Long planeId) {
 
     Plane plane = planeRepository.findById(planeId)
@@ -56,11 +58,12 @@ public class BookmarkService {
               .thumbnailUrl(plane.getThumbnailUrl())
               .viewCount(plane.getViewCount())
               .userNickname(user.getNickname())
-              .userProfileUrl(user.getProfileImageUrl())
+              .userProfileImageUrl(user.getProfileImageUrl())
               .build();
         });
   }
 
+  @Transactional
   public void deleteBookmark(User user, Long bookmarkId) {
 
     Bookmark bookmark = bookmarkRepository.findById(bookmarkId)

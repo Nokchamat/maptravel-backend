@@ -20,6 +20,8 @@ public enum ErrorCode {
   NOT_FOUND_BOOKMARK(HttpStatus.BAD_REQUEST, "북마크를 찾을 수 없습니다."),
 
   ALREADY_ADD_BOOKMARK(HttpStatus.BAD_REQUEST, "이미 북마크된 게시물 입니다."),
+  
+  ALREADY_ADD_FOLLOW(HttpStatus.BAD_REQUEST, "이미 팔로우된 유저 입니다."),
 
   INVALID_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 토큰입니다."),
 
