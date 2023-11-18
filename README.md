@@ -11,7 +11,8 @@ Front : Flutter
 - Backend 개발 시작 : 2023/11/12 ~ (진행 중)
 
 ## ERD
-<img width="1217" alt="image" src="https://github.com/Nokchamat/maptravel-backend/assets/107979129/f1e3f189-a3a8-4ee1-aeae-e1235d992cab">
+<img width="1193" alt="image" src="https://github.com/Nokchamat/maptravel-backend/assets/107979129/48b7d578-4dbb-449e-9c87-3baa727d2994">
+
 
 
   
