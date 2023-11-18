@@ -3,7 +3,7 @@ server:
 
 spring:
   jwt:
-    secret-key: sdlafjaldfkjasdlajdfl;akj
+    secret-key: ${JWT_SECRET_KEY}
     access:
       expiration: 3600000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
     refresh:
@@ -77,7 +77,6 @@ spring:
 cloud:
   aws:
     s3:
-      prefix: ${AWS_S3_PREFIX}
       bucket: ${BUCKET_NAME}
     stack.auto: false
     region:
