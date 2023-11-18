@@ -52,6 +52,9 @@ jobs:
           sed -i "s/\${GOOGLE_CLIENT_SECRET}/${{ secrets.GOOGLE_CLIENT_SECRET }}/g" application.yml
           sed -i "s/\${GOOGLE_REDIRECT_URI}/${{ secrets.GOOGLE_REDIRECT_URI }}/g" application.yml
 
+          sed -i "s/\${MAIL_ID}/${{ secrets.MAIL_ID }}/g" application.yml
+          sed -i "s/\${MAIL_PASSWORD}/${{ secrets.MAIL_PASSWORD }}/g" application.yml
+
           
       shell: bash
 
