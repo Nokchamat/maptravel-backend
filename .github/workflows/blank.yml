@@ -42,15 +42,15 @@ jobs:
           sed -i "s/\${BUCKET_NAME}/${{ secrets.BUCKET_NAME }}/g" application.yml
           sed -i "s/\${DB_PASSWORD}/${{ secrets.DB_PASSWORD }}/g" application.yml
           sed -i "s/\${DB_USERNAME}/${{ secrets.DB_USERNAME }}/g" application.yml
-          sed -i "s/\${DB_URL}/${{ secrets.DB_URL }}/g" application.yml
+          # sed -i "s/\${DB_URL}/${{ secrets.DB_URL }}/g" application.yml
           sed -i "s/\${JWT_SECRET_KEY}/${{ secrets.JWT_SECRET_KEY }}/g" application.yml
           
-          sed -i "s/\${NAVER_CLIENT_URI}/${{ secrets.NAVER_REDIRECT_URI }}/g" application.yml
+          # sed -i "s/\${NAVER_CLIENT_URI}/${{ secrets.NAVER_REDIRECT_URI }}/g" application.yml
           sed -i "s/\${NAVER_CLIENT_ID}/${{ secrets.NAVER_CLIENT_ID }}/g" application.yml
           sed -i "s/\${NAVER_CLIENT_SECRET}/${{ secrets.NAVER_CLIENT_SECRET }}/g" application.yml
           sed -i "s/\${GOOGLE_CLIENT_ID}/${{ secrets.GOOGLE_CLIENT_ID }}/g" application.yml
           sed -i "s/\${GOOGLE_CLIENT_SECRET}/${{ secrets.GOOGLE_CLIENT_SECRET }}/g" application.yml
-          sed -i "s/\${GOOGLE_REDIRECT_URL}/${{ secrets.GOOGLE_REDIRECT_URI }}/g" application.yml
+          # sed -i "s/\${GOOGLE_REDIRECT_URI}/${{ secrets.GOOGLE_REDIRECT_URI }}/g" application.yml
 
           
       shell: bash
