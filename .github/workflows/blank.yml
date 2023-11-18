@@ -75,6 +75,6 @@ jobs:
         # 도커 작업
         script: |
           docker rm -f $(docker ps -qa)
-          docker pull ${{ secrets.DOCKER_USERNAME }}/bestshare
+          docker pull ${{ secrets.DOCKER_USERNAME }}/maptreavel
           docker run --name app -p 8080:8080 -d ${{ secrets.DOCKER_USERNAME }}/maptravel
           docker image prune -f
