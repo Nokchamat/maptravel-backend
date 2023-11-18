@@ -62,8 +62,8 @@ jobs:
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -t app .
-        docker tag app ${{ secrets.DOCKER_USERNAME }}/maptreavel:latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/maptreavel:latest
+        docker tag app ${{ secrets.DOCKER_USERNAME }}/maptravel:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/maptravel:latest
 
     - name: Deploy
       uses: appleboy/ssh-action@master
@@ -75,6 +75,6 @@ jobs:
         # 도커 작업
         script: |
           docker rm -f $(docker ps -qa)
-          docker pull ${{ secrets.DOCKER_USERNAME }}/maptreavel
+          docker pull ${{ secrets.DOCKER_USERNAME }}/maptravel
           docker run --name app -p 8080:8080 -d ${{ secrets.DOCKER_USERNAME }}/maptravel
           docker image prune -f
