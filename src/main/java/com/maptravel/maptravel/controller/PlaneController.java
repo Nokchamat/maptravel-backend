@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/place")
+@RequestMapping("/v1/plane")
 public class PlaneController {
 
   private final PlaneService planeService;
