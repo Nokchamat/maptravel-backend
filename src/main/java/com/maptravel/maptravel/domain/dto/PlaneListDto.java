@@ -29,8 +29,10 @@ public class PlaneListDto {
   private String userNickname;
 
   private String userProfileImageUrl;
-  
-  //TODO 좋아요 여부
+
+  private Boolean isLikes;
+
+  private Boolean isBookmark;
 
   public static PlaneListDto fromEntity(Plane plane) {
 
@@ -45,6 +47,14 @@ public class PlaneListDto {
         .userNickname(plane.getUser().getNickname())
         .userProfileImageUrl(plane.getUser().getProfileImageUrl())
         .build();
+  }
+
+  public void setLikes(Boolean likes) {
+    isLikes = likes;
+  }
+
+  public void setBookmark(Boolean bookmark) {
+    isBookmark = bookmark;
   }
 
 }

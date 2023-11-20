@@ -31,9 +31,11 @@ public class PlaneDto {
 
   private String userProfileImageUrl;
 
+  private Boolean isLikes;
+
+  private Boolean isBookmark;
+
   List<PlaceDto> placeDtoList;
-  
-  //TODO 좋아요 여부 추가해야함
 
   public static PlaneDto fromEntity(Plane plane, List<PlaceDto> placeDtoList) {
     return PlaneDto.builder()
@@ -46,8 +48,17 @@ public class PlaneDto {
         .thumbnailUrl(plane.getThumbnailUrl())
         .userNickname(plane.getUser().getNickname())
         .userProfileImageUrl(plane.getUser().getProfileImageUrl())
+        .isBookmark(false)
+        .isLikes(false)
         .placeDtoList(placeDtoList)
         .build();
   }
 
+  public void setLikes(Boolean likes) {
+    isLikes = likes;
+  }
+
+  public void setBookmark(Boolean bookmark) {
+    isBookmark = bookmark;
+  }
 }
