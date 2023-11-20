@@ -46,6 +46,8 @@ public class PlaneListDto {
         .thumbnailUrl(plane.getThumbnailUrl())
         .userNickname(plane.getUser().getNickname())
         .userProfileImageUrl(plane.getUser().getProfileImageUrl())
+        .isLikes(false)
+        .isBookmark(false)
         .build();
   }
 

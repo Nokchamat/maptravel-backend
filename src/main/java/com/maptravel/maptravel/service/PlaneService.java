@@ -11,7 +11,6 @@ import com.maptravel.maptravel.domain.entity.User;
 import com.maptravel.maptravel.domain.form.CreatePlaceForm;
 import com.maptravel.maptravel.domain.form.CreatePlaneForm;
 import com.maptravel.maptravel.domain.repository.BookmarkRepository;
-import com.maptravel.maptravel.domain.repository.FollowRepository;
 import com.maptravel.maptravel.domain.repository.LikesRepository;
 import com.maptravel.maptravel.domain.repository.PlaceRepository;
 import com.maptravel.maptravel.domain.repository.PlaneRepository;
@@ -81,7 +80,7 @@ public class PlaneService {
             bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
                 .ifPresent(bookmark -> planeListDto.setBookmark(true));
             likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-                .ifPresent(bookmark -> planeListDto.setBookmark(true));
+                .ifPresent(bookmark -> planeListDto.setLikes(true));
           }
 
           return planeListDto;
@@ -120,7 +119,7 @@ public class PlaneService {
       bookmarkRepository.findByUserIdAndPlaneId(user.getId(), planeId)
           .ifPresent(bookmark -> planeDto.setBookmark(true));
       likesRepository.findByUserIdAndPlaneId(user.getId(), planeId)
-          .ifPresent(bookmark -> planeDto.setBookmark(true));
+          .ifPresent(bookmark -> planeDto.setLikes(true));
     }
 
     return planeDto;
