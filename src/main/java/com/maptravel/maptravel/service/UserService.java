@@ -57,6 +57,7 @@ public class UserService {
   public UserDto getMyProfile(User user) {
 
     return UserDto.builder()
+        .id(user.getId())
         .nickname(user.getNickname())
         .profileImageUrl(user.getProfileImageUrl())
         .isEmailVerify(user.getIsEmailVerify())
@@ -69,6 +70,7 @@ public class UserService {
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
     return UserDto.builder()
+        .id(user.getId())
         .nickname(user.getNickname())
         .profileImageUrl(user.getProfileImageUrl())
         .isEmailVerify(user.getIsEmailVerify())
