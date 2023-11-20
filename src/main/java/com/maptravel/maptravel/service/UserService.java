@@ -1,6 +1,8 @@
 package com.maptravel.maptravel.service;
 
+import com.maptravel.maptravel.domain.dto.UserDto;
 import com.maptravel.maptravel.domain.entity.User;
+import com.maptravel.maptravel.domain.repository.FollowRepository;
 import com.maptravel.maptravel.domain.repository.UserRepository;
 import com.maptravel.maptravel.exception.CustomException;
 import com.maptravel.maptravel.exception.ErrorCode;
@@ -14,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserService {
 
   private final UserRepository userRepository;
+
+  private final FollowRepository followRepository;
 
   private final AmazonS3Service amazonS3Service;
 
@@ -41,12 +45,34 @@ public class UserService {
   public void updateNickname(User user, String nickname) {
 
     userRepository.findByNickname(nickname)
-            .ifPresent(findUser -> {
-              throw new CustomException(ErrorCode.ALREADY_EXIST_NICKNAME);
-            });
+        .ifPresent(findUser -> {
+          throw new CustomException(ErrorCode.ALREADY_EXIST_NICKNAME);
+        });
 
     user.setNickname(nickname);
 
     userRepository.save(user);
+  }
+
+  public UserDto getMyProfile(User user) {
+
+    return UserDto.builder()
+        .nickname(user.getNickname())
+        .profileImageUrl(user.getProfileImageUrl())
+        .isEmailVerify(user.getIsEmailVerify())
+        .followerCount(followRepository.countByFollowingId(user.getId()))
+        .build();
+  }
+
+  public UserDto getProfileByUserId(Long userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+    return UserDto.builder()
+        .nickname(user.getNickname())
+        .profileImageUrl(user.getProfileImageUrl())
+        .isEmailVerify(user.getIsEmailVerify())
+        .followerCount(followRepository.countByFollowingId(user.getId()))
+        .build();
   }
 }

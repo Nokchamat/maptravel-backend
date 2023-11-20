@@ -14,4 +14,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
       Long followingId);
 
   Page<Follow> findByFollowerId(Long followerId, Pageable pageable);
+
+  Long countByFollowingId(Long id);
 }

@@ -1,12 +1,15 @@
 package com.maptravel.maptravel.controller;
 
 
+import com.maptravel.maptravel.domain.dto.UserDto;
 import com.maptravel.maptravel.domain.entity.User;
 import com.maptravel.maptravel.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,18 @@ public class UserController {
     userService.verifyEmail(user, code);
 
     return ResponseEntity.ok(null);
+  }
+
+  @GetMapping("/myprofile")
+  ResponseEntity<UserDto> getMyProfile(@AuthenticationPrincipal User user) {
+
+    return ResponseEntity.ok(userService.getMyProfile(user));
+  }
+
+  @GetMapping("/{userId}/myprofile")
+  ResponseEntity<UserDto> getProfileByUserId(@PathVariable Long userId) {
+
+    return ResponseEntity.ok(userService.getProfileByUserId(userId));
   }
 
   @PutMapping("/profileimage")
