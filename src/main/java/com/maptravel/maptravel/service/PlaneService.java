@@ -10,6 +10,9 @@ import com.maptravel.maptravel.domain.entity.Plane;
 import com.maptravel.maptravel.domain.entity.User;
 import com.maptravel.maptravel.domain.form.CreatePlaceForm;
 import com.maptravel.maptravel.domain.form.CreatePlaneForm;
+import com.maptravel.maptravel.domain.repository.BookmarkRepository;
+import com.maptravel.maptravel.domain.repository.FollowRepository;
+import com.maptravel.maptravel.domain.repository.LikesRepository;
 import com.maptravel.maptravel.domain.repository.PlaceRepository;
 import com.maptravel.maptravel.domain.repository.PlaneRepository;
 import com.maptravel.maptravel.exception.CustomException;
@@ -29,6 +32,10 @@ public class PlaneService {
   private final PlaneRepository planeRepository;
 
   private final PlaceRepository placeRepository;
+
+  private final BookmarkRepository bookmarkRepository;
+
+  private final LikesRepository likesRepository;
 
   private final AmazonS3Service amazonS3Service;
 
@@ -67,7 +74,18 @@ public class PlaneService {
   public Page<PlaneListDto> getPlaneList(User user, Pageable pageable) {
 
     return planeRepository.findAll(pageable)
-        .map(PlaneListDto::fromEntity);
+        .map(plane -> {
+          PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
+
+          if (user != null) {
+            bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+                .ifPresent(bookmark -> planeListDto.setBookmark(true));
+            likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+                .ifPresent(bookmark -> planeListDto.setBookmark(true));
+          }
+
+          return planeListDto;
+        });
   }
 
   @Transactional
@@ -96,8 +114,16 @@ public class PlaneService {
 
           return placeDto;
         }).collect(Collectors.toList());
+    PlaneDto planeDto = PlaneDto.fromEntity(plane, placeDtoList);
 
-    return PlaneDto.fromEntity(plane, placeDtoList);
+    if (user != null) {
+      bookmarkRepository.findByUserIdAndPlaneId(user.getId(), planeId)
+          .ifPresent(bookmark -> planeDto.setBookmark(true));
+      likesRepository.findByUserIdAndPlaneId(user.getId(), planeId)
+          .ifPresent(bookmark -> planeDto.setBookmark(true));
+    }
+
+    return planeDto;
   }
 
   @Transactional
