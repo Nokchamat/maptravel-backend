@@ -7,6 +7,7 @@ import com.maptravel.maptravel.domain.form.SignInForm;
 import com.maptravel.maptravel.domain.form.SignUpForm;
 import com.maptravel.maptravel.oauth.domain.Token;
 import com.maptravel.maptravel.service.SignService;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +32,10 @@ public class SignController {
   }
 
   @PostMapping("/signin")
-  ResponseEntity<Void> signIn(@RequestBody SignInForm signInForm) {
+  ResponseEntity<Void> signIn(@RequestBody SignInForm signInForm,
+      HttpServletRequest request) {
 
-    Token token = signService.signIn(signInForm);
+    Token token = signService.signIn(signInForm, request);
     HttpHeaders headers = new HttpHeaders();
     headers.add(ACCESS_TOKEN, token.getAccessToken());
     headers.add(REFRESH_TOKEN, token.getRefreshToken());
