@@ -8,8 +8,12 @@ import com.maptravel.maptravel.domain.form.SignUpForm;
 import com.maptravel.maptravel.domain.repository.UserRepository;
 import com.maptravel.maptravel.exception.CustomException;
 import com.maptravel.maptravel.exception.ErrorCode;
+import com.maptravel.maptravel.oauth.domain.RefreshToken;
+import com.maptravel.maptravel.oauth.domain.RefreshTokenRepository;
 import com.maptravel.maptravel.oauth.domain.Token;
 import com.maptravel.maptravel.oauth.jwt.JwtTokenProvider;
+import com.maptravel.maptravel.oauth.service.ClientIp;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
@@ -24,6 +28,7 @@ public class SignService {
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
   private final SendEmailService sendEmailService;
+  private final RefreshTokenRepository refreshTokenRepository;
 
   @Transactional
   public void signUp(SignUpForm signUpForm) {
@@ -54,8 +59,7 @@ public class SignService {
     sendEmailService.sendMail(signUpForm.getEmail(), emailVerifyCode);
   }
 
-  public Token signIn(SignInForm signInForm) {
-
+  public Token signIn(SignInForm signInForm, HttpServletRequest request) {
     userRepository.findByEmail(signInForm.getEmail())
         .ifPresent(user -> {
           if (!passwordEncoder.matches(signInForm.getPassword(),
@@ -64,6 +68,13 @@ public class SignService {
           }
         });
 
-    return jwtTokenProvider.generateToken(signInForm.getEmail());
+    Token token = jwtTokenProvider.generateToken(signInForm.getEmail());
+    refreshTokenRepository.save(
+        RefreshToken.builder()
+        .refreshToken(token.getRefreshToken())
+        .ip(ClientIp.getClientIp(request))
+        .build());
+
+    return token;
   }
 }
