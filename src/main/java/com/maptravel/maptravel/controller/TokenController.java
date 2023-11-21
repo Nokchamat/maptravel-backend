@@ -35,8 +35,6 @@ public class TokenController {
       response.addHeader(ACCESS_TOKEN, newToken.getAccessToken());
       response.addHeader(REFRESH_TOKEN, newToken.getRefreshToken());
       response.setContentType("application/json;charset=UTF-8");
-
-      throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
   }

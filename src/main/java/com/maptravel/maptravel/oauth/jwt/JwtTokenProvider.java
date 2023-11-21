@@ -103,7 +103,8 @@ public class JwtTokenProvider {
 
   public String getEmail(String token) {
     token = token.substring(PREFIX.length());
-    DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secretKey)).build().verify(token);
+    DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secretKey)).build()
+        .verify(token);
 
     return decodedJWT.getClaim(EMAIL_CLAIM).asString();
   }

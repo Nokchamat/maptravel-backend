@@ -1,5 +1,8 @@
 package com.maptravel.maptravel.exception;
 
+import static com.maptravel.maptravel.exception.ErrorCode.*;
+
+import com.amazonaws.services.kms.model.InvalidGrantTokenException;
 import com.maptravel.maptravel.exception.CustomException.CustomExceptionResponse;
 import com.maptravel.maptravel.exception.CustomException.CustomExceptionValidResponse;
 import java.util.List;
@@ -43,6 +46,19 @@ public class ExceptionHandler {
             .status(exception.getStatus())
             .code(exception.getErrorCode().toString())
             .message(exception.getMessage())
+            .build());
+  }
+
+  @org.springframework.web.bind.annotation.ExceptionHandler(InvalidGrantTokenException.class)
+  public ResponseEntity<CustomExceptionResponse> InvalidTokenExceptionHandler() {
+    log.error("InvalidGrantTokenException 발생");
+
+    return ResponseEntity
+        .status(INVALID_TOKEN.getHttpStatus())
+        .body(CustomExceptionResponse.builder()
+            .status(INVALID_TOKEN.getHttpStatus().value())
+            .code(INVALID_TOKEN.toString())
+            .message("접속 시도한 IP가 다릅니다.")
             .build());
   }
 
