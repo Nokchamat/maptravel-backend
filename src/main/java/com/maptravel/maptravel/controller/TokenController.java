@@ -3,8 +3,6 @@ package com.maptravel.maptravel.controller;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
 
-import com.maptravel.maptravel.exception.CustomException;
-import com.maptravel.maptravel.exception.ErrorCode;
 import com.maptravel.maptravel.oauth.domain.Token;
 import com.maptravel.maptravel.oauth.jwt.JwtTokenProvider;
 import com.maptravel.maptravel.oauth.service.ClientIp;

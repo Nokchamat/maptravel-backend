@@ -20,7 +20,7 @@ public class TokenService {
 
   @Transactional(noRollbackFor = InvalidGrantTokenException.class)
   public Token refreshToken(String token, String currentIp) {
-    RefreshToken refreshToken = refreshTokenRepository.findById(token)
+    RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token)
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REFRESH_TOKEN));
 
     if (!refreshToken.getIp().equals(currentIp)) {

@@ -60,7 +60,6 @@ public class SignService {
   }
 
   public Token signIn(SignInForm signInForm, HttpServletRequest request) {
-
     userRepository.findByEmail(signInForm.getEmail())
         .ifPresent(user -> {
           if (!passwordEncoder.matches(signInForm.getPassword(),
@@ -70,15 +69,11 @@ public class SignService {
         });
 
     Token token = jwtTokenProvider.generateToken(signInForm.getEmail());
-    refreshTokenRepository.save(RefreshToken.builder()
+    refreshTokenRepository.save(
+        RefreshToken.builder()
         .refreshToken(token.getRefreshToken())
         .ip(ClientIp.getClientIp(request))
         .build());
-
-    System.out.println("===========================");
-    System.out.println(request.getRemoteAddr());
-    System.out.println(ClientIp.getClientIp(request));
-    System.out.println("===========================");
 
     return token;
   }
