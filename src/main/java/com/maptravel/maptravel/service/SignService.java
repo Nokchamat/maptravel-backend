@@ -60,13 +60,13 @@ public class SignService {
   }
 
   public Token signIn(SignInForm signInForm, HttpServletRequest request) {
-    userRepository.findByEmail(signInForm.getEmail())
-        .ifPresent(user -> {
-          if (!passwordEncoder.matches(signInForm.getPassword(),
-              user.getPassword())) {
-            throw new CustomException(ErrorCode.MISMATCH_EMAIL_PASSWORD);
-          }
-        });
+    User user = userRepository.findByEmail(signInForm.getEmail())
+        .orElseThrow(() -> new CustomException(ErrorCode.MISMATCH_EMAIL_PASSWORD));
+
+    if (!passwordEncoder.matches(signInForm.getPassword(),
+        user.getPassword())) {
+      throw new CustomException(ErrorCode.MISMATCH_EMAIL_PASSWORD);
+    }
 
     Token token = jwtTokenProvider.generateToken(signInForm.getEmail());
     refreshTokenRepository.save(
