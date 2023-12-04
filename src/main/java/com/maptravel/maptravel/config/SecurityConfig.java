@@ -7,6 +7,7 @@ import com.maptravel.maptravel.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -37,9 +38,11 @@ public class SecurityConfig {
         .csrf().disable()
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .sessionManagement(sessionManagement ->
-            sessionManagement.sessionCreationPolicy(SessionCreationPolicy.NEVER))
+            sessionManagement.sessionCreationPolicy(
+                SessionCreationPolicy.NEVER))
         .authorizeRequests(auth -> auth
-            .antMatchers("/**").permitAll()
+            .antMatchers("/v1/signup", "/v1/signin", "/v1/token/refresh").permitAll()
+            .antMatchers(HttpMethod.GET, "/v1/plane/**").permitAll()
             .anyRequest().authenticated()
         )
         .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
