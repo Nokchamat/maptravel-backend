@@ -38,11 +38,11 @@ public class BookmarkController {
     return ResponseEntity.ok(bookmarkService.getBookmark(user, pageable));
   }
 
-  @DeleteMapping("/plane/bookmark/{bookmarkId}")
+  @DeleteMapping("/plane/{planeId}/bookmark")
   ResponseEntity<Void> deleteBookmark(@AuthenticationPrincipal User user,
-      @PathVariable Long bookmarkId) {
+      @PathVariable Long planeId) {
 
-    bookmarkService.deleteBookmark(user, bookmarkId);
+    bookmarkService.deleteBookmark(user, planeId);
 
     return ResponseEntity.ok(null);
   }

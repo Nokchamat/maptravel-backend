@@ -27,11 +27,11 @@ public class LikesController {
     return ResponseEntity.ok(null);
   }
 
-  @DeleteMapping("/plane/likes/{likesId}")
+  @DeleteMapping("/plane/{planeId}/likes")
   ResponseEntity<Void> deleteBookmark(@AuthenticationPrincipal User user,
-      @PathVariable Long likesId) {
+      @PathVariable Long planeId) {
 
-    likesService.deleteLikes(user, likesId);
+    likesService.deleteLikes(user, planeId);
 
     return ResponseEntity.ok(null);
   }
