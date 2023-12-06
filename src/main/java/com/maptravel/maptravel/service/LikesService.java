@@ -1,9 +1,8 @@
 package com.maptravel.maptravel.service;
 
 import static com.maptravel.maptravel.exception.ErrorCode.ALREADY_ADD_BOOKMARK;
-import static com.maptravel.maptravel.exception.ErrorCode.NOT_FOUND_BOOKMARK;
+import static com.maptravel.maptravel.exception.ErrorCode.ALREADY_DELETE_LIKES;
 import static com.maptravel.maptravel.exception.ErrorCode.NOT_FOUND_PLANE;
-import static com.maptravel.maptravel.exception.ErrorCode.PERMISSION_DENIED;
 
 import com.maptravel.maptravel.domain.entity.Likes;
 import com.maptravel.maptravel.domain.entity.Plane;
@@ -23,7 +22,6 @@ public class LikesService {
   private final PlaneRepository planeRepository;
 
   public void addLikes(User user, Long planeId) {
-
     Plane plane = planeRepository.findById(planeId)
         .orElseThrow(() -> new CustomException(NOT_FOUND_PLANE));
 
@@ -38,14 +36,9 @@ public class LikesService {
         .build());
   }
 
-  public void deleteLikes(User user, Long bookmarkId) {
-
-    Likes likes = likesRepository.findById(bookmarkId)
-        .orElseThrow(() -> new CustomException(NOT_FOUND_BOOKMARK));
-
-    if (!user.getId().equals(likes.getUser().getId())) {
-      throw new CustomException(PERMISSION_DENIED);
-    }
+  public void deleteLikes(User user, Long planeId) {
+    Likes likes = likesRepository.findByUserIdAndPlaneId(user.getId(), planeId)
+        .orElseThrow(() -> new CustomException(ALREADY_DELETE_LIKES));
 
     likesRepository.delete(likes);
   }
