@@ -75,6 +75,7 @@ public class PlaneService {
     return planeRepository.findAll(pageable)
         .map(plane -> {
           PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
+          planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
 
           if (user != null) {
             bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
