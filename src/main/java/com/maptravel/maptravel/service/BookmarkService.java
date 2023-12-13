@@ -2,9 +2,7 @@ package com.maptravel.maptravel.service;
 
 import static com.maptravel.maptravel.exception.ErrorCode.ALREADY_ADD_BOOKMARK;
 import static com.maptravel.maptravel.exception.ErrorCode.ALREADY_DELETE_BOOKMARK;
-import static com.maptravel.maptravel.exception.ErrorCode.NOT_FOUND_BOOKMARK;
 import static com.maptravel.maptravel.exception.ErrorCode.NOT_FOUND_PLANE;
-import static com.maptravel.maptravel.exception.ErrorCode.PERMISSION_DENIED;
 
 import com.maptravel.maptravel.domain.dto.BookmarkDto;
 import com.maptravel.maptravel.domain.entity.Bookmark;
@@ -57,9 +55,6 @@ public class BookmarkService {
               .country(plane.getCountry())
               .city(plane.getCity())
               .thumbnailUrl(plane.getThumbnailUrl())
-              .viewCount(plane.getViewCount())
-              .userNickname(user.getNickname())
-              .userProfileImageUrl(user.getProfileImageUrl())
               .build();
         });
   }
