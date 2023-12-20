@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface PlaneRepository extends JpaRepository<Plane, Long> {
 
   Page<Plane> findAll(Pageable pageable);
+  Page<Plane> findAllByCountryOrCity(String country, String city, Pageable pageable);
+  Page<Plane> findAllByUserId(Long userId, Pageable pageable);
 }
