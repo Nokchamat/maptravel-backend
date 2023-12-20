@@ -43,8 +43,8 @@ public class PlaneController {
     return ResponseEntity.ok(planeService.getPlaneList(user, pageable));
   }
 
-  @GetMapping("/search")
-  ResponseEntity<Page<PlaneListDto>> getPlaneListByCity(@AuthenticationPrincipal User user,
+  @GetMapping("/location")
+  ResponseEntity<Page<PlaneListDto>> getPlaneListByLocation(@AuthenticationPrincipal User user,
       Pageable pageable, @RequestParam String country, @RequestParam String city) {
 
     return ResponseEntity.ok(planeService.getPlaneListByCountryOrCity(user, country, city, pageable));

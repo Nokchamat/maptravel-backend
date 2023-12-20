@@ -27,10 +27,4 @@ public class BookmarkDto {
 
   private String thumbnailUrl;
 
-  private Long viewCount;
-
-  private String userNickname;
-
-  private String userProfileImageUrl;
-
 }

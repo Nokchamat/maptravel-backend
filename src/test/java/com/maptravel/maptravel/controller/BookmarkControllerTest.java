@@ -152,15 +152,6 @@ class BookmarkControllerTest {
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.content[0].thumbnailUrl",
                 equalTo(plane.getThumbnailUrl()))
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].viewCount",
-                equalTo(Integer.parseInt(plane.getViewCount().toString())))
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].userNickname",
-                equalTo(user.getNickname()))
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].userProfileImageUrl",
-                equalTo(user.getProfileImageUrl()))
         )
         .andDo(MockMvcResultHandlers.print());
 
@@ -188,13 +179,13 @@ class BookmarkControllerTest {
         .thumbnailUrl(THUMBNAIL)
         .user(user)
         .build());
-    Bookmark bookmark = bookmarkRepository.save(Bookmark.builder()
+    bookmarkRepository.save(Bookmark.builder()
         .plane(plane)
         .user(user)
         .build());
 
     mockMvc.perform(
-            delete(url + "/v1/plane" + "/bookmark/" + bookmark.getId())
+            delete(url + "/v1/plane/" +plane.getId() + "/bookmark")
                 .header(ACCESS_TOKEN,
                     jwtTokenProvider.generateToken(user.getEmail())
                         .getAccessToken())
