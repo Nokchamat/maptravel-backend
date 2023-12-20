@@ -117,13 +117,13 @@ class LikesControllerTest {
         .thumbnailUrl(THUMBNAIL)
         .user(user)
         .build());
-    Likes likes = likesRepository.save(Likes.builder()
+    likesRepository.save(Likes.builder()
         .plane(plane)
         .user(user)
         .build());
 
     mockMvc.perform(
-            delete(url + "/v1/plane" + "/likes/" + likes.getId())
+            delete(url + "/v1/plane/" + plane.getId() + "/likes")
                 .header(ACCESS_TOKEN,
                     jwtTokenProvider.generateToken(user.getEmail())
                         .getAccessToken())

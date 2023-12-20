@@ -81,7 +81,6 @@ class PlaneControllerTest {
   @DisplayName("여행 게시물 작성 - 성공")
   @Test
   void createPlane_Success() throws Exception {
-
     List<MultipartFile> multipartFileList = new ArrayList<>();
     multipartFileList.add(new MockMultipartFile(
         "picture00", "picture00.png", "png",
@@ -135,7 +134,7 @@ class PlaneControllerTest {
         .build();
 
     mockMvc.perform(
-            multipart(url + "/v1/place")
+            multipart(url + "/v1/plane")
                 .file("thumbnail", createPlaneForm.getThumbnail().getBytes())
                 .file("createPlaceFormList[0].pictureList",
                     createPlaceFormList.get(0).getPictureList().get(0).getBytes())
@@ -187,7 +186,6 @@ class PlaneControllerTest {
   @DisplayName("여행 게시물 리스트 조회 - 성공")
   @Test
   void getPlaneList_Success() throws Exception {
-
     user = userRepository.save(User.builder()
         .email("test@test.com")
         .password("12341234")
@@ -215,7 +213,7 @@ class PlaneControllerTest {
         .build());
 
     mockMvc.perform(
-            get(url + "/v1/place")
+            get(url + "/v1/plane")
         ).andExpect(
             status().isOk()
         ).andExpect(
@@ -228,7 +226,6 @@ class PlaneControllerTest {
   @DisplayName("여행 게시물 상세 조회 - 성공")
   @Test
   void getPlaneDetail_Success() throws Exception {
-
     user = userRepository.save(User.builder()
         .email("test@test.com")
         .password("12341234")
@@ -259,7 +256,7 @@ class PlaneControllerTest {
         .build());
 
     mockMvc.perform(
-            get(url + "/v1/place/" + plane.getId())
+            get(url + "/v1/plane/" + plane.getId())
         ).andExpect(
             status().isOk()
         ).andExpect(
@@ -329,7 +326,7 @@ class PlaneControllerTest {
         .build());
 
     mockMvc.perform(
-            delete(url + "/v1/place/" + plane.getId())
+            delete(url + "/v1/plane/" + plane.getId())
                 .header(ACCESS_TOKEN,
                     jwtTokenProvider.generateToken(user.getEmail())
                         .getAccessToken())
@@ -345,5 +342,113 @@ class PlaneControllerTest {
     assertTrue(placeList.isEmpty());
 
   }
+
+  @DisplayName("여행 게시물 리스트 조회 By 지역 - 성공")
+  @Test
+  void getPlaneListByLocation_Success() throws Exception {
+    user = userRepository.save(User.builder()
+        .email("test@test.com")
+        .password("12341234")
+        .nickname("닉네임")
+        .name("이름")
+        .profileImageUrl("profileUrl")
+        .isEmailVerify(true)
+        .role(RoleType.USER)
+        .provider(LOCAL.name())
+        .build());
+
+    planeRepository.save(Plane.builder()
+        .subject("subject")
+        .content("content")
+        .country("일본")
+        .city("도쿄")
+        .viewCount(0L)
+        .thumbnailUrl(THUMBNAIL)
+        .user(user)
+        .build());
+    planeRepository.save(Plane.builder()
+        .subject("subject")
+        .content("content")
+        .country("미국")
+        .city("뉴욕")
+        .viewCount(0L)
+        .thumbnailUrl(THUMBNAIL)
+        .user(user)
+        .build());
+
+    mockMvc.perform(
+            get(url + "/v1/plane/location")
+                .param("country", "일본")
+                .param("city", "")
+        ).andExpect(
+            status().isOk()
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content", hasSize(1))
+        ).andExpect(
+            jsonPath("$.content[0].country", equalTo("일본"))
+        )
+        .andDo(MockMvcResultHandlers.print());
+  }
+
+  @DisplayName("여행 게시물 리스트 조회 By 닉네임 - 성공")
+  @Test
+  void getPlaneListByNickname_Success() throws Exception {
+    User otherUser = userRepository.save(User.builder()
+        .email("othertest@test.com")
+        .password("12341234")
+        .nickname("다른 닉네임")
+        .name("이름")
+        .profileImageUrl("profileUrl")
+        .isEmailVerify(true)
+        .role(RoleType.USER)
+        .provider(LOCAL.name())
+        .build());
+
+    user = userRepository.save(User.builder()
+        .email("test@test.com")
+        .password("12341234")
+        .nickname("닉네임")
+        .name("이름")
+        .profileImageUrl("profileUrl")
+        .isEmailVerify(true)
+        .role(RoleType.USER)
+        .provider(LOCAL.name())
+        .build());
+
+    planeRepository.save(Plane.builder()
+        .subject("subject")
+        .content("content")
+        .country("일본")
+        .city("도쿄")
+        .viewCount(0L)
+        .thumbnailUrl(THUMBNAIL)
+        .user(user)
+        .build());
+    planeRepository.save(Plane.builder()
+        .subject("subject")
+        .content("content")
+        .country("미국")
+        .city("뉴욕")
+        .viewCount(0L)
+        .thumbnailUrl(THUMBNAIL)
+        .user(otherUser)
+        .build());
+
+    mockMvc.perform(
+            get(url + "/v1/plane/nickname")
+                .param("nickname", "닉네임")
+        ).andExpect(
+            status().isOk()
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content", hasSize(1))
+        ).andExpect(
+            jsonPath("$.content[0].country", equalTo("일본"))
+        )
+        .andExpect(
+            jsonPath("$.content[0].userNickname", equalTo("닉네임"))
+        )
+        .andDo(MockMvcResultHandlers.print());
+  }
+
 
 }
