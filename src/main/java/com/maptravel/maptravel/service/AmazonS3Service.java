@@ -48,7 +48,7 @@ public class AmazonS3Service {
     return "";
   }
 
-  public String uploadForThumbnail(MultipartFile thumbnail, Long planeId) {
+  public String uploadForThumbnail(MultipartFile thumbnail, Long planeId, String uuid) {
 
     try {
       log.info("[uploadForThumbnail 시작]" + " planeId : " + planeId);
@@ -56,7 +56,7 @@ public class AmazonS3Service {
       objectMetadata.setContentType(thumbnail.getContentType());
       objectMetadata.setContentLength(thumbnail.getSize());
 
-      String fileKey = "plane/" + planeId + "/thumbnail";
+      String fileKey = "plane/" + planeId + "/" + uuid + "/thumbnail";
 
       amazonS3Client.putObject(bucket, fileKey, thumbnail.getInputStream(), objectMetadata);
 
@@ -70,7 +70,7 @@ public class AmazonS3Service {
     return "";
   }
 
-  public String uploadForPictureList(List<MultipartFile> pictureList, int index, Long planeId) {
+  public String uploadForPictureList(List<MultipartFile> pictureList, int index, Long planeId, String uuid) {
 
     try {
       log.info("[uploadForPictureList 시작]" + " planeId : " + planeId + ", index : " + index);
@@ -80,7 +80,7 @@ public class AmazonS3Service {
         objectMetadata.setContentType(pictureList.get(i).getContentType());
         objectMetadata.setContentLength(pictureList.get(i).getSize());
 
-        String fileKey = "plane/" + planeId + "/" + index + "/" + i;
+        String fileKey = "plane/" + planeId + "/" + uuid + "/" + index + "/" + i;
 
         amazonS3Client.putObject(bucket, fileKey, pictureList.get(i).getInputStream(),
             objectMetadata);
@@ -106,13 +106,15 @@ public class AmazonS3Service {
   }
 
   public void deleteUploadFileArray(String[] uploadedFileArray) {
-    log.info("[deleteUploadFileArray 시작]" + " uploadedFileArray : " + Arrays.toString(uploadedFileArray));
+    log.info("[deleteUploadFileArray 시작]" + " uploadedFileArray : " + Arrays.toString(
+        uploadedFileArray));
 
     for (String uploadedFileUrl : uploadedFileArray) {
       amazonS3Client.deleteObject(bucket, uploadedFileUrl.substring(PREFIX.length()));
     }
 
-    log.info("[deleteUploadFileArray 완료]" + " uploadedFileArray : " + Arrays.toString(uploadedFileArray));
+    log.info("[deleteUploadFileArray 완료]" + " uploadedFileArray : " + Arrays.toString(
+        uploadedFileArray));
   }
 
 }

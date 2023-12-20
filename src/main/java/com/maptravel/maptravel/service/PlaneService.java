@@ -14,9 +14,11 @@ import com.maptravel.maptravel.domain.repository.BookmarkRepository;
 import com.maptravel.maptravel.domain.repository.LikesRepository;
 import com.maptravel.maptravel.domain.repository.PlaceRepository;
 import com.maptravel.maptravel.domain.repository.PlaneRepository;
+import com.maptravel.maptravel.domain.repository.UserRepository;
 import com.maptravel.maptravel.exception.CustomException;
 import com.maptravel.maptravel.exception.ErrorCode;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,13 +38,14 @@ public class PlaneService {
 
   private final LikesRepository likesRepository;
 
+  private final UserRepository userRepository;
+
   private final AmazonS3Service amazonS3Service;
 
   private final ObjectMapper objectMapper;
 
   @Transactional
   public void createPlane(User user, CreatePlaneForm createPlaneForm) {
-
     Plane plane = planeRepository.save(Plane.builder()
         .subject(createPlaneForm.getSubject())
         .content(createPlaneForm.getContent())
@@ -51,8 +54,9 @@ public class PlaneService {
         .viewCount(0L)
         .user(user)
         .build());
+    String uuid = UUID.randomUUID().toString();
     plane.setThumbnailUrl(amazonS3Service.uploadForThumbnail(
-        createPlaneForm.getThumbnail(), plane.getId()));
+        createPlaneForm.getThumbnail(), plane.getId(), uuid));
 
     for (int i = 0; i < createPlaneForm.getCreatePlaceFormList().size(); i++) {
       CreatePlaceForm createPlaceForm =
@@ -65,13 +69,12 @@ public class PlaneService {
           .plane(plane)
           .pictureListUrl(
               amazonS3Service.uploadForPictureList(
-                  createPlaceForm.getPictureList(), i, plane.getId())
+                  createPlaceForm.getPictureList(), i, plane.getId(), uuid)
           ).build());
     }
   }
 
   public Page<PlaneListDto> getPlaneList(User user, Pageable pageable) {
-
     return planeRepository.findAll(pageable)
         .map(plane -> {
           PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
@@ -148,5 +151,43 @@ public class PlaneService {
     });
 
     planeRepository.delete(plane);
+  }
+
+  public Page<PlaneListDto> getPlaneListByCountryOrCity(User user, String country, String city,
+      Pageable pageable) {
+    return planeRepository.findAllByCountryOrCity(country, city, pageable)
+        .map(plane -> {
+          PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
+          planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
+
+          if (user != null) {
+            bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+                .ifPresent(bookmark -> planeListDto.setBookmark(true));
+            likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+                .ifPresent(bookmark -> planeListDto.setLikes(true));
+          }
+
+          return planeListDto;
+        });
+  }
+
+  public Page<PlaneListDto> getPlaneListByNickname(User user, String nickname, Pageable pageable) {
+    User writer = userRepository.findByNickname(nickname)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+    return planeRepository.findAllByUserId(writer.getId(), pageable)
+        .map(plane -> {
+          PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
+          planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
+
+          if (user != null) {
+            bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+                .ifPresent(bookmark -> planeListDto.setBookmark(true));
+            likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+                .ifPresent(bookmark -> planeListDto.setLikes(true));
+          }
+
+          return planeListDto;
+        });
   }
 }

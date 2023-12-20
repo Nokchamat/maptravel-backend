@@ -90,9 +90,9 @@ class PlaneControllerTest {
         "picture01", "picture01.png", "png",
         "test file".getBytes(StandardCharsets.UTF_8)));
 
-    when(amazonS3Service.uploadForThumbnail(any(), any()))
+    when(amazonS3Service.uploadForThumbnail(any(), any(), any()))
         .thenReturn(THUMBNAIL);
-    when(amazonS3Service.uploadForPictureList(any(), anyInt(), any()))
+    when(amazonS3Service.uploadForPictureList(any(), anyInt(), any(), any()))
         .thenReturn(PICTURE);
 
     CreatePlaceForm createPlaceForm0 = CreatePlaceForm.builder()

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -40,6 +41,20 @@ public class PlaneController {
       Pageable pageable) {
 
     return ResponseEntity.ok(planeService.getPlaneList(user, pageable));
+  }
+
+  @GetMapping("/search")
+  ResponseEntity<Page<PlaneListDto>> getPlaneListByCity(@AuthenticationPrincipal User user,
+      Pageable pageable, @RequestParam String country, @RequestParam String city) {
+
+    return ResponseEntity.ok(planeService.getPlaneListByCountryOrCity(user, country, city, pageable));
+  }
+
+  @GetMapping("/nickname")
+  ResponseEntity<Page<PlaneListDto>> getPlaneListByCity(@AuthenticationPrincipal User user,
+      Pageable pageable, @RequestParam String nickname) {
+
+    return ResponseEntity.ok(planeService.getPlaneListByNickname(user, nickname, pageable));
   }
 
   @GetMapping("/{planeId}")
