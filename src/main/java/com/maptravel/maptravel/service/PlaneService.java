@@ -76,19 +76,7 @@ public class PlaneService {
 
   public Page<PlaneListDto> getPlaneList(User user, Pageable pageable) {
     return planeRepository.findAll(pageable)
-        .map(plane -> {
-          PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
-          planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
-
-          if (user != null) {
-            bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-                .ifPresent(bookmark -> planeListDto.setBookmark(true));
-            likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-                .ifPresent(bookmark -> planeListDto.setLikes(true));
-          }
-
-          return planeListDto;
-        });
+        .map(plane -> toPlaneListDto(plane, user));
   }
 
   @Transactional
@@ -156,38 +144,45 @@ public class PlaneService {
   public Page<PlaneListDto> getPlaneListByCountryOrCity(User user, String country, String city,
       Pageable pageable) {
     return planeRepository.findAllByCountryOrCity(country, city, pageable)
-        .map(plane -> {
-          PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
-          planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
-
-          if (user != null) {
-            bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-                .ifPresent(bookmark -> planeListDto.setBookmark(true));
-            likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-                .ifPresent(bookmark -> planeListDto.setLikes(true));
-          }
-
-          return planeListDto;
-        });
+        .map(plane -> toPlaneListDto(plane, user));
   }
 
   public Page<PlaneListDto> getPlaneListByNickname(User user, String nickname, Pageable pageable) {
     User writer = userRepository.findByNickname(nickname)
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
+    return getPlaneListDto(user, pageable, writer);
+  }
+
+  public Page<PlaneListDto> getPlaneListByUserId(User user, Long userId, Pageable pageable) {
+    User writer = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+    return getPlaneListDto(user, pageable, writer);
+  }
+
+  public Page<PlaneListDto> getMyPlaneList(User user, Pageable pageable) {
+    return planeRepository.findAllByUserId(user.getId(), pageable)
+        .map(plane -> toPlaneListDto(plane, user));
+  }
+
+
+  private Page<PlaneListDto> getPlaneListDto(User user, Pageable pageable, User writer) {
     return planeRepository.findAllByUserId(writer.getId(), pageable)
-        .map(plane -> {
-          PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
-          planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
+        .map(plane -> toPlaneListDto(plane, user));
+  }
 
-          if (user != null) {
-            bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-                .ifPresent(bookmark -> planeListDto.setBookmark(true));
-            likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-                .ifPresent(bookmark -> planeListDto.setLikes(true));
-          }
+  private PlaneListDto toPlaneListDto(Plane plane, User user) {
+      PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
+      planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
 
-          return planeListDto;
-        });
+      if (user != null) {
+        bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+            .ifPresent(bookmark -> planeListDto.setBookmark(true));
+        likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+            .ifPresent(bookmark -> planeListDto.setLikes(true));
+      }
+
+      return planeListDto;
   }
 }
