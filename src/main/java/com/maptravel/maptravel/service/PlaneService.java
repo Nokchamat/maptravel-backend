@@ -138,6 +138,9 @@ public class PlaneService {
       }
     });
 
+    likesRepository.deleteAllByPlaneId(planeId);
+    bookmarkRepository.deleteAllByPlaneId(planeId);
+
     planeRepository.delete(plane);
   }
 
