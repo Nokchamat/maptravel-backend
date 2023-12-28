@@ -51,10 +51,24 @@ public class PlaneController {
   }
 
   @GetMapping("/nickname")
-  ResponseEntity<Page<PlaneListDto>> getPlaneListByCity(@AuthenticationPrincipal User user,
+  ResponseEntity<Page<PlaneListDto>> getPlaneListByNickname(@AuthenticationPrincipal User user,
       Pageable pageable, @RequestParam String nickname) {
 
     return ResponseEntity.ok(planeService.getPlaneListByNickname(user, nickname, pageable));
+  }
+
+  @GetMapping("/user/{userId}")
+  ResponseEntity<Page<PlaneListDto>> getPlaneListByUserId(@AuthenticationPrincipal User user,
+      @PathVariable Long userId, Pageable pageable) {
+
+    return ResponseEntity.ok(planeService.getPlaneListByUserId(user, userId, pageable));
+  }
+
+  @GetMapping("/myplane")
+  ResponseEntity<Page<PlaneListDto>> getMyPlane(@AuthenticationPrincipal User user,
+      Pageable pageable) {
+
+    return ResponseEntity.ok(planeService.getMyPlaneList(user, pageable));
   }
 
   @GetMapping("/{planeId}")
