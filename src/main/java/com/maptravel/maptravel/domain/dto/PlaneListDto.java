@@ -26,6 +26,8 @@ public class PlaneListDto {
 
   private String thumbnailUrl;
 
+  private Long userId;
+
   private String userNickname;
 
   private String userProfileImageUrl;
@@ -46,6 +48,7 @@ public class PlaneListDto {
         .city(plane.getCity())
         .viewCount(plane.getViewCount())
         .thumbnailUrl(plane.getThumbnailUrl())
+        .userId(plane.getUser().getId())
         .userNickname(plane.getUser().getNickname())
         .userProfileImageUrl(plane.getUser().getProfileImageUrl())
         .isLikes(false)
