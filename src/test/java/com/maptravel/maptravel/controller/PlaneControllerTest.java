@@ -16,11 +16,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.maptravel.maptravel.domain.constants.RoleType;
+import com.maptravel.maptravel.domain.entity.Bookmark;
+import com.maptravel.maptravel.domain.entity.Likes;
 import com.maptravel.maptravel.domain.entity.Place;
 import com.maptravel.maptravel.domain.entity.Plane;
 import com.maptravel.maptravel.domain.entity.User;
 import com.maptravel.maptravel.domain.form.CreatePlaceForm;
 import com.maptravel.maptravel.domain.form.CreatePlaneForm;
+import com.maptravel.maptravel.domain.repository.BookmarkRepository;
+import com.maptravel.maptravel.domain.repository.LikesRepository;
 import com.maptravel.maptravel.domain.repository.PlaceRepository;
 import com.maptravel.maptravel.domain.repository.PlaneRepository;
 import com.maptravel.maptravel.domain.repository.UserRepository;
@@ -63,6 +67,12 @@ class PlaneControllerTest {
   private PlaceRepository placeRepository;
 
   @Autowired
+  private LikesRepository likesRepository;
+
+  @Autowired
+  private BookmarkRepository bookmarkRepository;
+
+  @Autowired
   private JwtTokenProvider jwtTokenProvider;
 
   private final String url = "http://localhost:8080";
@@ -73,6 +83,8 @@ class PlaneControllerTest {
 
   @AfterEach
   void init() {
+    likesRepository.deleteAll();
+    bookmarkRepository.deleteAll();
     placeRepository.deleteAll();
     planeRepository.deleteAll();
     userRepository.deleteAll();
@@ -323,6 +335,15 @@ class PlaneControllerTest {
         .address("placeAddress")
         .pictureListUrl("[\"" + PICTURE + "\"]")
         .plane(plane)
+        .build());
+
+    likesRepository.save(Likes.builder()
+        .plane(plane)
+        .user(user)
+        .build());
+    bookmarkRepository.save(Bookmark.builder()
+        .plane(plane)
+        .user(user)
         .build());
 
     mockMvc.perform(
