@@ -24,8 +24,8 @@ spring:
         format_sql: true
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 40MB
+      max-file-size: 10MB # 보통 한 개당 6MB로 봄
+      max-request-size: 100MB
 
   security:
     oauth2:
