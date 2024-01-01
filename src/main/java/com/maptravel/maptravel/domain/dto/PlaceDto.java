@@ -21,6 +21,10 @@ public class PlaceDto {
 
   private String address;
 
+  private Double latitude;
+
+  private Double longitude;
+
   private String[] pictureUrlArray;
 
 }
