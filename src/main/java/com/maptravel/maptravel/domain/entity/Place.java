@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,10 +26,16 @@ public class Place extends BaseTimeEntity {
 
   private String subject;
 
+  @Lob
   private String content;
 
   private String address;
 
+  private Double latitude;
+
+  private Double longitude;
+
+  @Lob
   private String pictureListUrl;
 
   @ManyToOne(fetch = FetchType.LAZY)

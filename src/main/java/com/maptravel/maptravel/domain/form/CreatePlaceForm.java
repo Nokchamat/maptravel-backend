@@ -21,6 +21,10 @@ public class CreatePlaceForm {
 
   private String address;
 
+  private Double latitude;
+
+  private Double longitude;
+
   private List<MultipartFile> pictureList;
 
 }

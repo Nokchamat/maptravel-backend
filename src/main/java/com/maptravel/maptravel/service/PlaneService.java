@@ -67,6 +67,8 @@ public class PlaneService {
           .content(createPlaceForm.getContent())
           .address(createPlaceForm.getAddress())
           .plane(plane)
+          .latitude(createPlaceForm.getLatitude())
+          .longitude(createPlaceForm.getLongitude())
           .pictureListUrl(
               amazonS3Service.uploadForPictureList(
                   createPlaceForm.getPictureList(), i, plane.getId(), uuid)
@@ -93,6 +95,8 @@ public class PlaneService {
               .subject(place.getSubject())
               .content(place.getContent())
               .address(place.getAddress())
+              .latitude(place.getLatitude())
+              .longitude(place.getLongitude())
               .build();
 
           try {
@@ -176,16 +180,16 @@ public class PlaneService {
   }
 
   private PlaneListDto toPlaneListDto(Plane plane, User user) {
-      PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
-      planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
+    PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
+    planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
 
-      if (user != null) {
-        bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-            .ifPresent(bookmark -> planeListDto.setBookmark(true));
-        likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
-            .ifPresent(bookmark -> planeListDto.setLikes(true));
-      }
+    if (user != null) {
+      bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+          .ifPresent(bookmark -> planeListDto.setBookmark(true));
+      likesRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
+          .ifPresent(bookmark -> planeListDto.setLikes(true));
+    }
 
-      return planeListDto;
+    return planeListDto;
   }
 }
