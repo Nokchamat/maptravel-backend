@@ -7,7 +7,9 @@ import com.maptravel.maptravel.oauth.domain.RefreshToken;
 import com.maptravel.maptravel.oauth.domain.RefreshTokenRepository;
 import com.maptravel.maptravel.oauth.domain.Token;
 import com.maptravel.maptravel.oauth.jwt.JwtTokenProvider;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +23,8 @@ public class TokenService {
   @Transactional(noRollbackFor = InvalidGrantTokenException.class)
   public Token refreshToken(String token, String currentIp) {
     RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REFRESH_TOKEN));
+        .orElseThrow(
+            () -> new CustomException(ErrorCode.NOT_FOUND_REFRESH_TOKEN));
 
     if (!refreshToken.getIp().equals(currentIp)) {
       refreshTokenRepository.delete(refreshToken);
@@ -29,10 +32,17 @@ public class TokenService {
       throw new InvalidGrantTokenException("접속 시도한 IP가 다릅니다.");
     }
 
-    Token newToken = jwtTokenProvider.generateToken(jwtTokenProvider.getEmail(token));
+    Token newToken = jwtTokenProvider.generateToken(
+        jwtTokenProvider.getEmail(token));
     refreshToken.setRefreshToken(newToken.getRefreshToken());
 
     return newToken;
+  }
+
+  @Scheduled(cron = "0 0 3 * * *")
+  public void removeRefreshToken() {
+    refreshTokenRepository.deleteAllByCreatedAtLessThanEqual(
+        LocalDateTime.now().minusDays(14));
   }
 
 }
