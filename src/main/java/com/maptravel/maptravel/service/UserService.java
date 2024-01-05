@@ -21,6 +21,8 @@ public class UserService {
 
   private final AmazonS3Service amazonS3Service;
 
+  private final SendEmailService sendEmailService;
+
   @Transactional
   public void verifyEmail(User user, String code) {
 
@@ -30,6 +32,13 @@ public class UserService {
 
     user.setEmailVerify();
     userRepository.save(user);
+  }
+
+  public void reSendEmail(User user) {
+    if(user.getIsEmailVerify()) {
+      throw new CustomException(ErrorCode.ALREADY_VERIFIED_EMAIL);
+    }
+    sendEmailService.sendMail(user.getEmail(), user.getEmailVerifyCode());
   }
 
   @Transactional

@@ -32,6 +32,13 @@ public class UserController {
     return ResponseEntity.ok(null);
   }
 
+  @GetMapping("/resend-email")
+  ResponseEntity<Void> reSendEmail(@AuthenticationPrincipal User user) {
+    userService.reSendEmail(user);
+
+    return ResponseEntity.ok(null);
+  }
+
   @GetMapping("/myprofile")
   ResponseEntity<UserDto> getMyProfile(@AuthenticationPrincipal User user) {
 

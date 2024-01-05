@@ -19,6 +19,7 @@ public enum ErrorCode {
   
   NOT_FOUND_BOOKMARK(HttpStatus.BAD_REQUEST, "북마크를 찾을 수 없습니다."),
   ALREADY_DELETE_BOOKMARK(HttpStatus.BAD_REQUEST, "이미 삭제된 북마크입니다."),
+  ALREADY_VERIFIED_EMAIL(HttpStatus.BAD_REQUEST, "이미 인증된 이메일입니다."),
 
   ALREADY_DELETE_LIKES(HttpStatus.BAD_REQUEST, "이미 취소된 좋아요입니다."),
 
