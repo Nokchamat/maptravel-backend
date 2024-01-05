@@ -41,7 +41,7 @@ public class SecurityConfig {
             sessionManagement.sessionCreationPolicy(
                 SessionCreationPolicy.NEVER))
         .authorizeRequests(auth -> auth
-            .antMatchers("/v1/signup", "/v1/signin", "/v1/token/refresh").permitAll()
+            .antMatchers("/v1/signup", "/v1/signin", "/v1/token/refresh", "/v1/user/resend-email").permitAll()
             .antMatchers(HttpMethod.GET, "/v1/plane/**").permitAll()
             .anyRequest().authenticated()
         )
