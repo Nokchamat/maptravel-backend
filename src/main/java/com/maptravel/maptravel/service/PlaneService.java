@@ -46,6 +46,10 @@ public class PlaneService {
 
   @Transactional
   public void createPlane(User user, CreatePlaneForm createPlaneForm) {
+    if (!user.getIsEmailVerify()) {
+      throw new CustomException(ErrorCode.PLEASE_VERIFY_EMAIL);
+    }
+
     Plane plane = planeRepository.save(Plane.builder()
         .subject(createPlaneForm.getSubject())
         .content(createPlaneForm.getContent())
