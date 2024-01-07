@@ -3,6 +3,7 @@ package com.maptravel.maptravel.controller;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
 
+import com.maptravel.maptravel.domain.form.GoogleSignInForm;
 import com.maptravel.maptravel.domain.form.SignInForm;
 import com.maptravel.maptravel.domain.form.SignUpForm;
 import com.maptravel.maptravel.oauth.domain.Token;
@@ -36,6 +37,18 @@ public class SignController {
       HttpServletRequest request) {
 
     Token token = signService.signIn(signInForm, request);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(ACCESS_TOKEN, token.getAccessToken());
+    headers.add(REFRESH_TOKEN, token.getRefreshToken());
+
+    return ResponseEntity.ok().headers(headers).body(null);
+  }
+
+  @PostMapping("/signin/google")
+  ResponseEntity<Void> signInByGoogle(@RequestBody GoogleSignInForm signInForm,
+      HttpServletRequest request) {
+
+    Token token = signService.signInByGoogle(signInForm, request);
     HttpHeaders headers = new HttpHeaders();
     headers.add(ACCESS_TOKEN, token.getAccessToken());
     headers.add(REFRESH_TOKEN, token.getRefreshToken());
