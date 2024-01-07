@@ -9,11 +9,13 @@ import com.maptravel.maptravel.oauth.domain.Token;
 import com.maptravel.maptravel.oauth.jwt.JwtTokenProvider;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class TokenService {
 
@@ -40,9 +42,12 @@ public class TokenService {
   }
 
   @Scheduled(cron = "0 0 3 * * *")
+  @Transactional
   public void removeRefreshToken() {
+    log.debug("[removeRefreshToken] 시작 : " + LocalDateTime.now());
     refreshTokenRepository.deleteAllByCreatedAtLessThanEqual(
         LocalDateTime.now().minusDays(14));
+    log.debug("[removeRefreshToken] 완료 : " + LocalDateTime.now());
   }
 
 }

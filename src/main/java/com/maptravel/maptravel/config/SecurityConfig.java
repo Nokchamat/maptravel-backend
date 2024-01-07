@@ -1,7 +1,5 @@
 package com.maptravel.maptravel.config;
 
-import com.maptravel.maptravel.oauth.handler.OAuth2SuccessHandler;
-import com.maptravel.maptravel.oauth.service.CustomOAuth2UserService;
 import com.maptravel.maptravel.oauth.jwt.JwtAuthenticationFilter;
 import com.maptravel.maptravel.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +21,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final CustomOAuth2UserService customOAuth2UserService;
+//  private final CustomOAuth2UserService customOAuth2UserService;
   private final JwtTokenProvider jwtTokenProvider;
-  private final OAuth2SuccessHandler oAuth2SuccessHandler;
+//  private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
   @Bean
   PasswordEncoder passwordEncoder() {
@@ -47,10 +45,10 @@ public class SecurityConfig {
         )
         .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
             UsernamePasswordAuthenticationFilter.class)
-        .oauth2Login(oauth ->
-            oauth.userInfoEndpoint().userService(customOAuth2UserService)
-                .and().successHandler(oAuth2SuccessHandler)
-        )
+//        .oauth2Login(oauth ->
+//            oauth.userInfoEndpoint().userService(customOAuth2UserService)
+//                .and().successHandler(oAuth2SuccessHandler)
+//        )
     ;
 
     return http.build();
