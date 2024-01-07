@@ -65,6 +65,10 @@ public class SignService {
     User user = userRepository.findByEmail(signInForm.getEmail())
         .orElseThrow(() -> new CustomException(ErrorCode.MISMATCH_EMAIL_PASSWORD));
 
+    if (!user.getProvider().equals(ProviderType.LOCAL.name())) {
+      throw new CustomException(ErrorCode.MISMATCHED_PLATFORM);
+    }
+
     if (!passwordEncoder.matches(signInForm.getPassword(),
         user.getPassword())) {
       throw new CustomException(ErrorCode.MISMATCH_EMAIL_PASSWORD);
@@ -101,7 +105,7 @@ public class SignService {
       if (!user.get().getProvider().equals(ProviderType.GOOGLE.name()) ||
           !user.get().getProviderId().equals(signInForm.getId()) ||
           !user.get().getName().equals(signInForm.getDisplayName())) {
-        throw new CustomException(ErrorCode.ALREADY_EXIST_OTHER_PLATFORM);
+        throw new CustomException(ErrorCode.MISMATCHED_PLATFORM);
       }
     }
 
