@@ -1,5 +1,6 @@
 package com.maptravel.maptravel.domain.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -31,8 +32,10 @@ public class Place extends BaseTimeEntity {
 
   private String address;
 
+  @Column(columnDefinition = "varchar(30)")
   private Double latitude;
 
+  @Column(columnDefinition = "varchar(30)")
   private Double longitude;
 
   @Lob

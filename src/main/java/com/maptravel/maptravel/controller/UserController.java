@@ -7,6 +7,7 @@ import com.maptravel.maptravel.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,6 +64,13 @@ public class UserController {
   ResponseEntity<Void> updateNickname(@AuthenticationPrincipal User user,
       @ModelAttribute(name = "nickname") String nickname) {
     userService.updateNickname(user, nickname);
+
+    return ResponseEntity.ok(null);
+  }
+
+  @DeleteMapping()
+  ResponseEntity<Void> deleteAccount(@AuthenticationPrincipal User user) {
+    userService.deleteAccount(user);
 
     return ResponseEntity.ok(null);
   }

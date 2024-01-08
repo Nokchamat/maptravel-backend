@@ -2,7 +2,10 @@ package com.maptravel.maptravel.service;
 
 import com.maptravel.maptravel.domain.dto.UserDto;
 import com.maptravel.maptravel.domain.entity.User;
+import com.maptravel.maptravel.domain.repository.BookmarkRepository;
 import com.maptravel.maptravel.domain.repository.FollowRepository;
+import com.maptravel.maptravel.domain.repository.LikesRepository;
+import com.maptravel.maptravel.domain.repository.PlaneRepository;
 import com.maptravel.maptravel.domain.repository.UserRepository;
 import com.maptravel.maptravel.exception.CustomException;
 import com.maptravel.maptravel.exception.ErrorCode;
@@ -22,6 +25,12 @@ public class UserService {
   private final AmazonS3Service amazonS3Service;
 
   private final SendEmailService sendEmailService;
+
+  private final LikesRepository likesRepository;
+
+  private final BookmarkRepository bookmarkRepository;
+
+  private final PlaneRepository planeRepository;
 
   @Transactional
   public void verifyEmail(User user, String code) {
@@ -85,5 +94,18 @@ public class UserService {
         .isEmailVerify(user.getIsEmailVerify())
         .followerCount(followRepository.countByFollowingId(user.getId()))
         .build();
+  }
+
+  @Transactional
+  public void deleteAccount(User user) {
+    planeRepository.findFirstByUserId(user.getId())
+        .ifPresent(plane -> {
+          throw new CustomException(ErrorCode.PLEASE_REMOVE_PLANE_FIRST);
+        });
+
+    likesRepository.deleteAllByUserId(user.getId());
+    bookmarkRepository.deleteAllByUserId(user.getId());
+
+    userRepository.delete(user);
   }
 }
