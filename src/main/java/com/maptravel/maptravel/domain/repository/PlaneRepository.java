@@ -1,6 +1,7 @@
 package com.maptravel.maptravel.domain.repository;
 
 import com.maptravel.maptravel.domain.entity.Plane;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,5 @@ public interface PlaneRepository extends JpaRepository<Plane, Long> {
   Page<Plane> findAll(Pageable pageable);
   Page<Plane> findAllByCountryOrCity(String country, String city, Pageable pageable);
   Page<Plane> findAllByUserId(Long userId, Pageable pageable);
+  Optional<Plane> findFirstByUserId(Long userId);
 }

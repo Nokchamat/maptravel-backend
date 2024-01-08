@@ -17,6 +17,8 @@ public enum ErrorCode {
   NOT_FOUND_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "리프래시 토큰을 찾을 수 없습니다."),
 
   NOT_FOUND_PLANE(HttpStatus.BAD_REQUEST, "여행 게시물을 찾을 수 없습니다."),
+  PLEASE_REMOVE_PLANE_FIRST(HttpStatus.BAD_REQUEST, "계정 탈퇴 전 작성한 여행을 삭제해주세요."),
+
   PLEASE_VERIFY_EMAIL(HttpStatus.BAD_REQUEST, "이메일 인증을 완료해주세요."),
 
   NOT_FOUND_BOOKMARK(HttpStatus.BAD_REQUEST, "북마크를 찾을 수 없습니다."),

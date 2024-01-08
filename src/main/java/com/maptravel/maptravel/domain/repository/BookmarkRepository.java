@@ -9,10 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-
   Optional<Bookmark> findByUserIdAndPlaneId(Long userId, Long planeId);
-
   Page<Bookmark> findAllByUserId(Long id, Pageable pageable);
-
   void deleteAllByPlaneId(Long planeId);
+  void deleteAllByUserId(Long userId);
 }

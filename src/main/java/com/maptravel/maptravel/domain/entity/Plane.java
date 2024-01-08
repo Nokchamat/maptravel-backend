@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class Plane extends BaseTimeEntity {
 
   private String subject;
 
+  @Lob
   private String content;
 
   private String country;
