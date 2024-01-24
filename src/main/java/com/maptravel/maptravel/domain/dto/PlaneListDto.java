@@ -38,6 +38,8 @@ public class PlaneListDto {
 
   private Boolean isBookmark;
 
+  private Long commentCount;
+
   public static PlaneListDto fromEntity(Plane plane) {
 
     return PlaneListDto.builder()
@@ -66,6 +68,10 @@ public class PlaneListDto {
 
   public void setLikesCount(Long likesCount) {
     this.likesCount = likesCount;
+  }
+
+  public void setCommentCount(Long commentCount) {
+    this.commentCount = commentCount;
   }
 }
 

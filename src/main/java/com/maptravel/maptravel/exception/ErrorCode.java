@@ -33,6 +33,8 @@ public enum ErrorCode {
 
   INVALID_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 토큰입니다."),
 
+  ALREADY_DELETE_COMMENT(HttpStatus.BAD_REQUEST, "이미 삭제된 댓글입니다."),
+
   // 공용
   PERMISSION_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다.");
 

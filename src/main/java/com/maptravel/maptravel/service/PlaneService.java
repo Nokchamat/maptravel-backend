@@ -11,6 +11,7 @@ import com.maptravel.maptravel.domain.entity.User;
 import com.maptravel.maptravel.domain.form.CreatePlaceForm;
 import com.maptravel.maptravel.domain.form.CreatePlaneForm;
 import com.maptravel.maptravel.domain.repository.BookmarkRepository;
+import com.maptravel.maptravel.domain.repository.CommentRepository;
 import com.maptravel.maptravel.domain.repository.LikesRepository;
 import com.maptravel.maptravel.domain.repository.PlaceRepository;
 import com.maptravel.maptravel.domain.repository.PlaneRepository;
@@ -39,6 +40,8 @@ public class PlaneService {
   private final LikesRepository likesRepository;
 
   private final UserRepository userRepository;
+
+  private final CommentRepository commentRepository;
 
   private final AmazonS3Service amazonS3Service;
 
@@ -186,6 +189,7 @@ public class PlaneService {
   private PlaneListDto toPlaneListDto(Plane plane, User user) {
     PlaneListDto planeListDto = PlaneListDto.fromEntity(plane);
     planeListDto.setLikesCount(likesRepository.countByPlaneId(plane.getId()));
+    planeListDto.setCommentCount(commentRepository.countByPlaneId(plane.getId()));
 
     if (user != null) {
       bookmarkRepository.findByUserIdAndPlaneId(user.getId(), plane.getId())
