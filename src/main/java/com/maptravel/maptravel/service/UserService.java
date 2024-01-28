@@ -3,6 +3,7 @@ package com.maptravel.maptravel.service;
 import com.maptravel.maptravel.domain.dto.UserDto;
 import com.maptravel.maptravel.domain.entity.User;
 import com.maptravel.maptravel.domain.repository.BookmarkRepository;
+import com.maptravel.maptravel.domain.repository.CommentRepository;
 import com.maptravel.maptravel.domain.repository.FollowRepository;
 import com.maptravel.maptravel.domain.repository.LikesRepository;
 import com.maptravel.maptravel.domain.repository.PlaneRepository;
@@ -31,6 +32,8 @@ public class UserService {
   private final BookmarkRepository bookmarkRepository;
 
   private final PlaneRepository planeRepository;
+
+  private final CommentRepository commentRepository;
 
   @Transactional
   public void verifyEmail(User user, String code) {
@@ -103,6 +106,7 @@ public class UserService {
           throw new CustomException(ErrorCode.PLEASE_REMOVE_PLANE_FIRST);
         });
 
+    commentRepository.deleteAllByUserId(user.getId());
     likesRepository.deleteAllByUserId(user.getId());
     bookmarkRepository.deleteAllByUserId(user.getId());
 
