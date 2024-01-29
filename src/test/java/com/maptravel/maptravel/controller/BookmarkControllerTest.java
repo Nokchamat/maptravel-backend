@@ -14,6 +14,7 @@ import com.maptravel.maptravel.domain.entity.Bookmark;
 import com.maptravel.maptravel.domain.entity.Plane;
 import com.maptravel.maptravel.domain.entity.User;
 import com.maptravel.maptravel.domain.repository.BookmarkRepository;
+import com.maptravel.maptravel.domain.repository.CommentRepository;
 import com.maptravel.maptravel.domain.repository.PlaneRepository;
 import com.maptravel.maptravel.domain.repository.UserRepository;
 import com.maptravel.maptravel.oauth.jwt.JwtTokenProvider;
@@ -49,12 +50,16 @@ class BookmarkControllerTest {
   @Autowired
   private BookmarkRepository bookmarkRepository;
 
+  @Autowired
+  private CommentRepository commentRepository;
+
   private final String url = "http://localhost:8080";
   private final String THUMBNAIL = "thumbnail";
 
   @AfterEach
   void init() {
     bookmarkRepository.deleteAll();
+    commentRepository.deleteAll();
     planeRepository.deleteAll();
     userRepository.deleteAll();
   }
