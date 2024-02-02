@@ -2,6 +2,7 @@ package com.maptravel.maptravel.domain.dto;
 
 import com.maptravel.maptravel.domain.entity.Comment;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,9 +28,11 @@ public class CommentDto {
 
   private String userProfileImageUrl;
 
+  private Boolean isMine;
+
   private LocalDateTime createdAt;
 
-  public static CommentDto fromEntity(Comment comment) {
+  public static CommentDto fromEntity(Comment comment, Long userId) {
 
     return CommentDto.builder()
         .id(comment.getId())
@@ -38,6 +41,7 @@ public class CommentDto {
         .userId(comment.getUser().getId())
         .userNickname(comment.getUser().getNickname())
         .userProfileImageUrl(comment.getUser().getProfileImageUrl())
+        .isMine(Objects.equals(userId, comment.getUser().getId()))
         .createdAt(comment.getCreatedAt())
         .build();
   }

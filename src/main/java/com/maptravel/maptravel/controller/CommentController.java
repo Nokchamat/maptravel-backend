@@ -34,9 +34,10 @@ public class CommentController {
   }
 
   @GetMapping("/plane/{planeId}/comment")
-  ResponseEntity<Page<CommentDto>> getComment(@PathVariable Long planeId, Pageable pageable) {
+  ResponseEntity<Page<CommentDto>> getComment(@AuthenticationPrincipal User user,
+      @PathVariable Long planeId, Pageable pageable) {
 
-    return ResponseEntity.ok(commentService.getComment(planeId, pageable));
+    return ResponseEntity.ok(commentService.getComment(user, planeId, pageable));
   }
 
   @DeleteMapping("/comment/{commentId}")

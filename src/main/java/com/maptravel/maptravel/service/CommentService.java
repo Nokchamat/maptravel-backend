@@ -44,9 +44,9 @@ public class CommentService {
     commentRepository.delete(comment);
   }
 
-  public Page<CommentDto> getComment(Long planeId, Pageable pageable) {
+  public Page<CommentDto> getComment(User user, Long planeId, Pageable pageable) {
 
     return commentRepository.findAllByPlaneId(planeId, pageable)
-        .map(CommentDto::fromEntity);
+        .map(comment -> CommentDto.fromEntity(comment, user.getId()));
   }
 }
