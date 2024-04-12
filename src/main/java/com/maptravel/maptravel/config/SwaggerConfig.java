@@ -24,9 +24,9 @@ public class SwaggerConfig {
 
   public ApiInfo apiInfo() {
     return new ApiInfoBuilder()
-        .title("TITLE")
-        .description("DESCRIPTION")
-        .version("VERSION")
+        .title("MapTravel")
+        .description("여행 게시물을 작성하고 그 위치를 지도로 한 번에 볼 수 있는 어플리케이션 입니다.")
+        .version("1.0")
         .build();
   }
 }
