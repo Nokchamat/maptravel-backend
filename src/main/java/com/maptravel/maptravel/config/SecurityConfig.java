@@ -21,7 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//  private final CustomOAuth2UserService customOAuth2UserService;
+  //  private final CustomOAuth2UserService customOAuth2UserService;
   private final JwtTokenProvider jwtTokenProvider;
 //  private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
@@ -39,7 +39,17 @@ public class SecurityConfig {
             sessionManagement.sessionCreationPolicy(
                 SessionCreationPolicy.NEVER))
         .authorizeRequests(auth -> auth
-            .antMatchers("/v1/signup", "/v1/signin/**", "/v1/token/refresh", "/v1/user/resend-email").permitAll()
+            .antMatchers(
+                "/v1/signup",
+                "/v1/signin/**",
+                "/v1/token/refresh",
+                "/v1/user/resend-email"
+            ).permitAll()
+            .antMatchers(
+                "/swagger-resources/**",
+                "/swagger-ui/**",
+                "/v3/api-docs/**"
+            ).permitAll()
             .antMatchers(HttpMethod.GET, "/v1/plane/**").permitAll()
             .anyRequest().authenticated()
         )
