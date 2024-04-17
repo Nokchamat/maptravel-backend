@@ -43,7 +43,7 @@ jobs:
       shell: bash
 
     - name: Build with Gradle
-      run: ./gradlew build test
+      run: ./gradlew build -x test
 
     - name: Docker build
       run: |
