@@ -37,9 +37,9 @@ jobs:
     - name: create application-secrets.yml
       run: |
         cd ./src/main/resources
+        echo pwd
         touch application-secrets.yml
         echo "${{ secrets.BUCKET_ACCESS_KEY }}" > application-secrets.yml
-        echo pwd
         echo ls
 
       shell: bash
