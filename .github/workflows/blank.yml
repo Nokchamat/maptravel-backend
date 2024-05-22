@@ -1,4 +1,4 @@
-# This workflow uses actions that are not certified by GitHub.
+e# This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
@@ -39,8 +39,8 @@ jobs:
         cd ./src/main/resources
         touch application-secrets.yml
         echo "${{ secrets.BUCKET_ACCESS_KEY }}" > application-secrets.yml
-        pwd
-        ls
+        echo pwd
+        echo ls
 
       shell: bash
 
